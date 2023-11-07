@@ -89,7 +89,6 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 
 ## Evaluation
 
-3. To run the testing.
 ```
-python test.py -c <config_filepath> -i
+python test.py -c <config_filepath> -i <test_odgt_dirpath>
 ```
