@@ -3,7 +3,7 @@
 import os
 import argparse
 
-from config import cfg
+from ml.config import cfg
 
 # misc
 import logging
