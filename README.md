@@ -20,7 +20,7 @@ conda install pandas numpy scikit-learn
 pip install wandb yacs --upgrade-strategy only-if-needed
 ```
 
-## Activity Classification Training
+## Training
 1. Format activity classification dataset. Example scripts found in `data`.
 
 Custom dataset files are expected to be formatted as follows:
