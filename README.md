@@ -25,10 +25,7 @@ pip install wandb yacs --upgrade-strategy only-if-needed
 
 Custom dataset files are expected to be formatted as follows:
 ```
-{
-    'file': <data_csv_filepath>, 
-    'annotation': <label>
- }
+{ 'filepath': <data_csv_filepath>, 'annotation': <label>}
 ...
 ```
 
