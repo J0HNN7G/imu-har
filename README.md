@@ -37,8 +37,8 @@ Example `mlp-dynamic.yaml`:
 DATASET:
   path: ""
   LIST:
-    train: "train_dynamic.odgt"
-    val: "val_dynamic.odgt"
+    train: "train_dynamic_pdiot-data.odgt"
+    val: "val_dynamic_pdiot-data.odgt"
 
 MODEL:
   arch: "mlp"
