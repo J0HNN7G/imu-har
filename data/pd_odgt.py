@@ -1,52 +1,69 @@
 """Generate ODGT label files for PDIoT dataset"""
-# general
 import os
 import glob
 import json
 import argparse
-
-# boxes
 import numpy as np
-
-# progress bar
 from tqdm import tqdm
 
 
-# constants
-TRAIN_NAME = 'train'
-VAL_NAME = 'val'
+# configuration for dataset split ratios and task names
+TRAIN_FRAC = 0.95
+TASK_NAMES = ['train', 'val', 'test', 'full']
 DATASET_NAME = 'pdiot-data'
-ODGT_NAME = f'{DATASET_NAME}.odgt'
+ODGT_FILE_FORMAT = f'{DATASET_NAME}.odgt'
+TASK_CATEGORIES = {
+    'train': ['dynamic', 'static', 'breath'],
+    'test': ['task_1', 'task_2', 'task_3', 'all']
+}
 
-# List of breathing types
-breathing_list = [
-    'normal',
-    'coughing',
-    'singing',
-    'eating',
-    'hyperventilating',
-    'laughing',
-    'talking'
-]
 
-# List of activity types
+# maps and max indices for activity and breathing types
 activity_list = [
     'sitting',
     'standing',
-    'lying down back',
-    'lying down right',
     'lying down on left',
+    'lying down right',
+    'lying down back',
     'lying down on stomach',
-    'ascending stairs',
-    'descending stairs',
-    'running',
     'normal walking',
+    'running',
+    'descending stairs',
+    'ascending stairs',
     'shuffle walking',
     'miscellaneous movements'
 ]
+activity_idxs = [0] + list(range(len(activity_list)-1))
+activity_dict = dict(zip(activity_list, activity_idxs))
+activity_max_len = max(activity_dict.values()) + 1
 
-static_activities = activity_list[:6]
-dynamic_activities = activity_list[6:]
+
+breathing_list = [
+    'normal',
+    'coughing',
+    'hyperventilating',
+    'singing',
+    'eating',
+    'laughing',
+    'talking'
+]
+breathing_idxs = list(range(len(breathing_list)-4)) + [3] * 4
+breathing_dict = dict(zip(breathing_list, breathing_idxs))
+breathing_max_len = max(breathing_dict.values()) + 1
+
+
+static_list = activity_list[:6]
+static_dict = {}
+for activity in static_list:
+    static_dict[activity] = activity_dict[activity]
+static_max_len = max(static_dict.values()) + 1
+
+
+dynamic_list = activity_list[6:]
+dynamic_dict = {}
+for i, activity in enumerate(dynamic_list):
+    dynamic_dict[activity] = i
+dynamic_max_len = max(dynamic_dict.values()) + 1
 
 
 def parse_metadata(data_fp):
@@ -60,73 +77,53 @@ def get_label(task, data_fp):
     # Exclude certain users or devices
     if (device != 'respeck') or (user == 'S37'):
         return -1
-
-    # Check if task is valid
-    if task not in ['all', 'dynamic', 'static', 'breath']:
-        raise ValueError(f'Invalid task: {task}')
-
-    # Check if activity is valid
-    if activity not in dynamic_activities and activity not in static_activities:
-        raise ValueError(f'Invalid activity: {activity}')
     
+    # Check if activity is valid
+    if activity not in dynamic_list and activity not in static_list:
+        raise ValueError(f'Invalid activity: {activity}')
     # Check if breathing is valid
     if breathing not in breathing_list:
         raise ValueError(f'Invalid breathing: {breathing}')
 
     if task == 'dynamic':
-        # Dynamic task returns the dynamic activity label if activity is dynamic
-        if activity in dynamic_activities:
-            return dynamic_activities.index(activity)
-        else:
-            return -1  # This ensures static activities don't get processed here
-
+        if activity in dynamic_list:
+            return dynamic_dict[activity]
     elif task == 'static':
-        # Static task creates a combined label for static activity and breathing if activity is static
-        if activity in static_activities:
-            static_index = static_activities.index(activity)
-            breath_index = breathing_list.index(breathing)
-            return static_index * len(breathing_list) + breath_index
-        else:
-            return -1  # This ensures dynamic activities don't get processed here
-
+        if activity in static_list:
+            return static_dict[activity]
     elif task == 'breath':
-        # Breath task returns breathing label directly if activity is static
-        if activity in static_activities:
-            return breathing_list.index(breathing)
-        else:
-            return -1  # Breath labels only apply to static activities
-
+        if activity in static_list:
+            return breathing_dict[breathing]
     elif task == 'all':
-        # 'All' task generates a unique label for all combinations
-        if activity in dynamic_activities:
-            # Dynamic activities have a unique label, offset by the total count of static-breath combinations
-            return (len(static_activities) * len(breathing_list)) + dynamic_activities.index(activity)
-        elif activity in static_activities:
-            # Static activities are combined with breathing types
-            static_index = static_activities.index(activity)
-            breath_index = breathing_list.index(breathing)
-            return (static_index * len(breathing_list)) + breath_index
-        else:
-            return -1  # In case activity is neither dynamic nor static
-
+        # 'all' task generates a unique label for all combinations
+        if activity in dynamic_list:
+            return (static_max_len * breathing_max_len) + dynamic_dict[activity]
+        elif activity in static_list:
+            static_index = static_dict[activity]
+            breath_index = breathing_dict[breathing]
+            return static_index + breath_index * static_max_len
+    elif task == 'task_1':
+        if activity in activity_list:
+            return activity_dict[activity]
+    elif task == 'task_2':
+        if (activity in static_list) and (breathing in breathing_list[:3]):
+            static_index = static_dict[activity]
+            breath_index = breathing_dict[breathing]
+            return static_index + breath_index * static_max_len
+    elif task == 'task_3':
+        if activity in static_list:
+            static_index = static_dict[activity]
+            breath_index = breathing_dict[breathing]
+            return static_index + breath_index * static_max_len
     else:
-        # If none of the above cases are met, an invalid task is provided
         raise ValueError("Unrecognized task.")
+    
+    return -1
 
 
 def indices2odgt(odgt_fp, indices, data_fps, labels):
     """
-    Generate ODGT label files for PennFudanPed dataset using given indices and file paths.
-
-    Parameters:
-    - odgt_fp (str): File path to save the ODGT label file.
-    - dir_p (str): Directory path to the dataset.
-    - indices (list): List of indices to process.
-    - data_fps (list): List of data file paths.
-    - labels (list): List of mask file paths.
-
-    Returns:
-    None
+    Write ODGT label files for dataset given indices, file paths, and labels.
     """
     for idx in tqdm(indices): 
         sample = {
@@ -140,75 +137,53 @@ def indices2odgt(odgt_fp, indices, data_fps, labels):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description="PDIoT Classification Dataset"
-    )
-    parser.add_argument(
-        "-d", "--dir",
-        required=True,
-        metavar="PATH",
-        help="absolute path to intended PennFudan dataset directory",
-        type=str,
-    )
-    parser.add_argument(
-        "-t", "--task",
-        default='all',
-        metavar="STR",
-        help="task to generate labels for: all, dynamic, static, breath",
-        type=str,
-    )
-    parser.add_argument(
-        "-f", "--frac",
-        default=0.8,
-        metavar="FLOAT",
-        help="fraction of samples to put in training set vs validation set",
-        type=float,
-    )
+    parser = argparse.ArgumentParser(description="PDIoT Classification Dataset")
+    parser.add_argument("-d", "--dir", required=True, help="Directory path to the dataset", type=str)
+    parser.add_argument("-t", "--task", default='all', help="Task for which to generate labels", type=str)
+    parser.add_argument("-s", "--split", action='store_false', help="Flag to not split into train, val, and test sets")
     args = parser.parse_args()
+
+    # Validate input directory and task
     if not os.path.exists(args.dir):
-        raise ValueError('Cannot find data directory')
-    if not 0 <= args.frac <= 1:
-        raise ValueError('train fraction out of range [0,1]!')
+        raise ValueError('Data directory not found')
+    if args.task not in TASK_CATEGORIES['train'] + TASK_CATEGORIES['test']:
+        raise ValueError(f'Invalid task: {args.task}')
 
+    # Prepare dataset file paths
+    print('Starting ODGT file creation')
+    dataset_dir = os.path.join(args.dir, DATASET_NAME)
+    data_fps = glob.glob(f'{dataset_dir}/anonymized_dataset_2023/*/*/*')
 
-    print(f'Starting odgt file creation')
-    dataset_dir_p = os.path.join(args.dir, DATASET_NAME)
-    data_fps = glob.glob(dataset_dir_p + '/anonymized_dataset_2023/*/*/*' )
-
-
-    data_fps_valid = []
-    labels = []
+    # Filter and label data file paths
+    data_fps_valid, labels = [], []
     for data_fp in data_fps:
         label = get_label(args.task, data_fp)
         if label != -1:
             data_fps_valid.append(data_fp)
             labels.append(label)
-    data_fps = data_fps_valid
-            
 
-    indices = np.random.permutation(len(data_fps)).tolist()
-    limit = int(len(data_fps) * args.frac) 
+    # Perform dataset split if required
+    if args.split:
+        indices = np.random.permutation(len(data_fps_valid)).tolist()
+        limit = int(len(data_fps_valid) * TRAIN_FRAC)
+        val_test_div = -int((len(data_fps_valid) - limit) / 2)
 
-    print(f'Train indexing')
-    odgt_fp_train = os.path.join(dataset_dir_p, f'{TRAIN_NAME}_{args.task}_{ODGT_NAME}')
-    if os.path.exists(odgt_fp_train):
-        print('Train indexing already done!')
+        # Generate ODGT files for train, validation, and test splits
+        for split in TASK_NAMES[:3]:
+            odgt_fp = os.path.join(dataset_dir, f'{split}_{args.task}_{ODGT_FILE_FORMAT}')
+            if not os.path.exists(odgt_fp):
+                open(odgt_fp, 'w').close()
+                indices2odgt(odgt_fp, indices[...], data_fps_valid, labels)
+                print(f'{split.capitalize()} file saved at: {odgt_fp}')
+            else:
+                print(f'{split.capitalize()} indexing already done!')
+
+    # Generate a single ODGT file without splitting
     else:
-        open(odgt_fp_train, 'w').close() 
-        indices2odgt(odgt_fp_train, indices[:limit], data_fps, labels)
-        print(f'Train file saved at: {odgt_fp_train}')
-
-    print(f'Validation indexing')
-    odgt_fp_val = os.path.join(dataset_dir_p, f'{VAL_NAME}_{args.task}_{ODGT_NAME}')
-    if os.path.exists(odgt_fp_val):
-        print('Validation indexing already done!')
-    else:
-        open(odgt_fp_val, 'w').close() 
-        indices2odgt(odgt_fp_val, indices[limit:], data_fps, labels)
-        print(f'Validation file saved at: {odgt_fp_val}')
-
-
-
-
-    
-
+        odgt_fp = os.path.join(dataset_dir, f'{TASK_NAMES[3]}_{args.task}_{ODGT_FILE_FORMAT}')
+        if not os.path.exists(odgt_fp):
+            open(odgt_fp, 'w').close()
+            indices2odgt(odgt_fp, range(len(data_fps_valid)), data_fps_valid, labels)
+            print(f'File saved at: {odgt_fp}')
+        else:
+            print('Indexing already done!')
