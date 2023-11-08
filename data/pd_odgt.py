@@ -13,7 +13,7 @@ TASK_NAMES = ['train', 'val', 'test', 'full']
 DATASET_NAME = 'pdiot-data'
 ODGT_FILE_FORMAT = f'{DATASET_NAME}.odgt'
 TASK_CATEGORIES = {
-    'train': ['dynamic', 'static', 'breath'],
+    'train': ['motion', 'dynamic', 'static', 'breath'],
     'test': ['task_1', 'task_2', 'task_3', 'all']
 }
 
@@ -84,7 +84,12 @@ def get_label(task, data_fp):
     # Check if breathing is valid
     if breathing not in breathing_list:
         raise ValueError(f'Invalid breathing: {breathing}')
-
+    
+    if task == 'motion':
+        if activity in static_list:
+            return 0
+        elif activity in dynamic_list:
+            return 1
     if task == 'dynamic':
         if activity in dynamic_list:
             return dynamic_dict[activity]
