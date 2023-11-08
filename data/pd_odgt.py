@@ -167,13 +167,18 @@ if __name__ == '__main__':
         indices = np.random.permutation(len(data_fps_valid)).tolist()
         limit = int(len(data_fps_valid) * TRAIN_FRAC)
         val_test_div = -int((len(data_fps_valid) - limit) / 2)
+        split_indices = [
+            indices[:limit],
+            indices[limit:val_test_div],
+            indices[val_test_div:],
+        ]
 
         # Generate ODGT files for train, validation, and test splits
-        for split in TASK_NAMES[:3]:
+        for i, split in enumerate(TASK_NAMES[:3]):
             odgt_fp = os.path.join(dataset_dir, f'{split}_{args.task}_{ODGT_FILE_FORMAT}')
             if not os.path.exists(odgt_fp):
                 open(odgt_fp, 'w').close()
-                indices2odgt(odgt_fp, indices[...], data_fps_valid, labels)
+                indices2odgt(odgt_fp, split_indices[i], data_fps_valid, labels)
                 print(f'{split.capitalize()} file saved at: {odgt_fp}')
             else:
                 print(f'{split.capitalize()} indexing already done!')
