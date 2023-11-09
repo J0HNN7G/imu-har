@@ -12,7 +12,8 @@ _C = CN()
 _C.DATASET = CN()
 # path to the root of the dataset directory
 _C.DATASET.path = ""
-
+# total number of unique labels model output
+_C.DATASET.num_classes = 2
 _C.DATASET.LIST = CN()
 # file path to the training data list
 _C.DATASET.LIST.train = ""
@@ -27,10 +28,6 @@ _C.DATASET.LIST.test = ""
 _C.MODEL = CN()
 # model input configuration
 _C.MODEL.INPUT = CN()
-
-# total number of unique labels model output
-_C.MODEL.num_classes = 2
-
 # type of sensors used for input data
 _C.MODEL.INPUT.sensor = "all"
 # input data format
@@ -54,8 +51,6 @@ _C.MODEL.ARCH.dropout = 0.5
 _C.TRAIN = CN()
 # directory to save training checkpoints
 _C.TRAIN.path = ""
-# seed for random number generators in trainings
-_C.TRAIN.seed = -1
 
 _C.TRAIN.DATA = CN()
 # window overlap size in sliding window analysis
@@ -86,3 +81,13 @@ _C.TRAIN.LR.schedule = 'step'
 _C.TRAIN.LR.step_size = 3
 # factor to reduce the learning rate
 _C.TRAIN.LR.gamma = 0.1
+
+_C.TRAIN.FN = CN()
+# weights filename
+_C.TRAIN.FN.weight = "weights.hdf5"
+# history filename
+_C.TRAIN.FN.history = "history.csv"
+# config filename
+_C.TRAIN.FN.config = "config.yaml"
+# log filename
+_C.TRAIN.FN.log = "log.txt"

@@ -82,7 +82,7 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 ```
 <DIR>
 ├── weights.hdf5            # checkpoint with best validation accuracy
-├── history.tsv             # training and validation metrics history
+├── history.csv             # training and validation metrics history
 ├── config.yaml             # configuration file (updated with train.py arguments)
 └── log.txt                 # model training logs
 ```

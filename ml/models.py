@@ -77,7 +77,7 @@ class ModelBuilder:
     - build_classifier(args, weights, num_classes): Build a classifier model.
     """
     @staticmethod
-    def build_classifier(args, weights):
+    def build_classifier(args, weights, num_classes):
         """
         Build a classifier model.
 
@@ -106,7 +106,7 @@ class ModelBuilder:
         else:
             raise Exception('Architecture undefined!')
         
-        classifier.add(tf.keras.layers.Dense(units=args.num_classes, activation='softmax'))
+        classifier.add(tf.keras.layers.Dense(units=num_classes, activation='softmax'))
 
         pretrained = (len(weights) > 0)
         if pretrained:

@@ -14,7 +14,7 @@ def get_sliding_windows(data, window_size, overlap_size):
     return sliding_window_view(data, window_size, axis=0)[::(overlap_size * window_size)]
 
 
-def odgt2data(odgt_fp, window_size, overlap_size):
+def odgt2data(odgt_fp, window_size, overlap_size, num_classes):
     odgt = [json.loads(x.rstrip()) for x in open(odgt_fp, 'r')]
     
     X = []
@@ -27,4 +27,11 @@ def odgt2data(odgt_fp, window_size, overlap_size):
             X.append(sample)
             y.append(recording['annotation'])
 
-    return np.array(X), np.array(y)
+    X = np.array(X)
+
+    # Convert labels to one-hot encoding using numpy
+    y_onehot = np.zeros((len(y), num_classes))
+    y_onehot[np.arange(len(y)), y] = 1
+    y = np.array(y_onehot)
+
+    return X, y
