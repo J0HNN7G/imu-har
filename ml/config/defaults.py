@@ -38,13 +38,13 @@ _C.MODEL.INPUT.window_size = 25
 
 # model architecture specification
 _C.MODEL.ARCH = CN()
-# type of model architecture
+# type of model architecture (log, mlp, lstm)
 _C.MODEL.ARCH.type = "mlp"
-# size of hidden layers
+# size of hidden layers for MLP or LSTM
 _C.MODEL.ARCH.hidden_size = 256
-# number of hidden layers
+# number of hidden layers for MLP or LSTM
 _C.MODEL.ARCH.num_layers = 2
-# dropout rate for regularization
+# dropout rate for regularization for MLP
 _C.MODEL.ARCH.dropout = 0.5
 
 # -----------------------------------------------------------------------------
@@ -65,8 +65,6 @@ _C.TRAIN.DATA.batch_size = 32
 _C.TRAIN.LEN = CN()
 # total number of training epochs
 _C.TRAIN.LEN.num_epoch = 10
-# starting epoch for training, allows resuming from checkpoint
-_C.TRAIN.LEN.start_epoch = 0
 # stop training if validation hasn't improved for this many epochs
 _C.TRAIN.LEN.early_stop = 2
 
