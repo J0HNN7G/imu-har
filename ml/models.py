@@ -169,7 +169,10 @@ class LRScheduleBuilder:
                 return lr
         elif args.schedule == 'step':
             def lr_scheduler(epoch, lr):
-                return lr * args.gamma if epoch % args.step_size == 0 else lr
+                if epoch > 0 and epoch % args.step_size == 0:
+                    return lr * args.gamma
+                else:
+                    return lr
         else:
             raise Exception('LR Scheduler undefined!')
         return lr_scheduler
