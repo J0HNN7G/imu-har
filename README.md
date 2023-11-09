@@ -32,38 +32,46 @@ Custom dataset files are expected to be formatted as follows:
 
 2. Make configuration YAML file. 
 
-Example `mlp-dynamic.yaml`:
+Example `log-motion.yaml`:
 ```
 DATASET:
   path: ""
+  num_classes: 2
   LIST:
-    train: "train_dynamic_pdiot-data.odgt"
-    val: "val_dynamic_pdiot-data.odgt"
+    train: "train_motion_pdiot-data.odgt"
+    val: "val_motion_pdiot-data.odgt"
+    test: "test_motion_pdiot-data.odgt"
+
 
 MODEL:
-  arch: "mlp"
-  sensor: "all"
-  input: "normal"
+  INPUT:
+    sensor: "all"
+    format: "normal"
+    window_size: 25
+  ARCH:
+    type: "log"
+
 
 TRAIN:
   path: ""
   seed: -1
   DATA:
-    batch_size: 32
+    overlap_size: 10
+    batch_size: 64
     num_workers: 4
     disp_iter: 20
   LEN:
-    num_epoch: 10
+    num_epoch: 100
     start_epoch: 0
-    early_stop: 2
+    early_stop: 10
   OPTIM:
     optim: "sgd"
-    lr: 0.005
+    lr: 0.001
     momentum: 0.9
     weight_decay: 0.0005
   LR:
     schedule: 'step'
-    step_size: 3
+    step_size: 40
     gamma: 0.1
 ```
 
