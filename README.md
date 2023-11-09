@@ -75,9 +75,8 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
 ```
 <DIR>
-├── weights_best.tflite        # checkpoint with best validation mAP
-├── weights_epoch_<n>.tflite   # last checkpoint whilst running
-├── weights_final.tflite       # final checkpoint if run finished
+├── weights_best.keras     # checkpoint with best validation accuracy
+├── weights_final.keras    # final checkpoint if run finished
 ├── history.tsv             # training and validation metrics history
 ├── config.yaml             # configuration file (updated with train.py arguments)
 └── log.txt                 # model training logs

@@ -27,11 +27,4 @@ def odgt2data(odgt_fp, window_size, overlap_size, num_classes):
             X.append(sample)
             y.append(recording['annotation'])
 
-    X = np.array(X)
-
-    # Convert labels to one-hot encoding using numpy
-    y_onehot = np.zeros((len(y), num_classes))
-    y_onehot[np.arange(len(y)), y] = 1
-    y = np.array(y_onehot)
-
-    return X, y
+    return np.array(X), np.array(y)
