@@ -58,8 +58,6 @@ TRAIN:
   DATA:
     overlap_size: 10
     batch_size: 64
-    num_workers: 4
-    disp_iter: 20
   LEN:
     num_epoch: 100
     start_epoch: 0
@@ -83,8 +81,7 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
 ```
 <DIR>
-├── weights_best.keras     # checkpoint with best validation accuracy
-├── weights_final.keras    # final checkpoint if run finished
+├── weights.hdf5            # checkpoint with best validation accuracy
 ├── history.tsv             # training and validation metrics history
 ├── config.yaml             # configuration file (updated with train.py arguments)
 └── log.txt                 # model training logs

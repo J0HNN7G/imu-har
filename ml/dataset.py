@@ -14,7 +14,7 @@ def get_sliding_windows(data, window_size, overlap_size):
     return sliding_window_view(data, window_size, axis=0)[::(overlap_size * window_size)]
 
 
-def odgt2data(odgt_fp, window_size, overlap_size, num_classes):
+def odgt2data(odgt_fp, window_size, overlap_size):
     odgt = [json.loads(x.rstrip()) for x in open(odgt_fp, 'r')]
     
     X = []

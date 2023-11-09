@@ -61,10 +61,6 @@ _C.TRAIN.DATA = CN()
 _C.TRAIN.DATA.overlap_size = 10
 # number of samples per gradient update
 _C.TRAIN.DATA.batch_size = 32
-# number of subprocesses to use for data loading
-_C.TRAIN.DATA.num_workers = 4
-# iteration interval to display training status
-_C.TRAIN.DATA.disp_iter = 20
 
 _C.TRAIN.LEN = CN()
 # total number of training epochs

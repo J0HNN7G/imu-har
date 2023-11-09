@@ -22,8 +22,6 @@ TRAIN:
   DATA:
     overlap_size: 10
     batch_size: 64
-    num_workers: 4
-    disp_iter: 20
   LEN:
     num_epoch: 100
     start_epoch: 0
