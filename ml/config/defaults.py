@@ -12,8 +12,6 @@ _C = CN()
 _C.DATASET = CN()
 # path to the root of the dataset directory
 _C.DATASET.path = ""
-# total number of unique labels in the dataset
-_C.DATASET.num_classes = 2
 
 _C.DATASET.LIST = CN()
 # file path to the training data list
@@ -29,6 +27,10 @@ _C.DATASET.LIST.test = ""
 _C.MODEL = CN()
 # model input configuration
 _C.MODEL.INPUT = CN()
+
+# total number of unique labels model output
+_C.MODEL.num_classes = 2
+
 # type of sensors used for input data
 _C.MODEL.INPUT.sensor = "all"
 # input data format
@@ -46,7 +48,6 @@ _C.MODEL.ARCH.hidden_size = 256
 _C.MODEL.ARCH.num_layers = 2
 # dropout rate for regularization for MLP
 _C.MODEL.ARCH.dropout = 0.5
-
 # -----------------------------------------------------------------------------
 # Training
 # -----------------------------------------------------------------------------
