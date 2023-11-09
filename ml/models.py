@@ -133,16 +133,14 @@ class OptimizerBuilder:
         Returns:
         - optimizer: The optimizer.
         """
-        lr_scheduler = LRScheduleBuilder.build_scheduler(args.LR)
-
-        if args.OPTIM.optim == 'sgd':
-            optimizer = tf.keras.optimizers.SGD(learning_rate=lr_scheduler,
-                                                momentum=args.OPTIM.momentum, 
-                                                weight_decay=args.OPTIM.weight_decay)
-        elif args.OPTIM.optim == 'adam':
-            optimizer = tf.keras.optimizers.Adam(learning_rate=lr_scheduler,
-                                                 beta_1=args.OPTIM.momentum,
-                                                 weight_decay=args.OPTIM.weight_decay)
+        if args.optim == 'sgd':
+            optimizer = tf.keras.optimizers.SGD(learning_rate=args.lr,
+                                                momentum=args.momentum, 
+                                                weight_decay=args.weight_decay)
+        elif args.optim == 'adam':
+            optimizer = tf.keras.optimizers.Adam(learning_rate=args.lr,
+                                                 beta_1=args.momentum,
+                                                 weight_decay=args.weight_decay)
         else:
             raise Exception('Optimizer undefined!')
         return optimizer
@@ -162,19 +160,16 @@ class LRScheduleBuilder:
 
         Args:
         - args: Learning rate scheduler configuration.
-        - optimizer: The optimizer to schedule the learning rate for.
 
         Returns:
         - lr_scheduler: The learning rate scheduler.
         """
         if args.schedule == 'constant':
-            lr_scheduler = args.lr
+            def lr_scheduler(epoch, lr):
+                return lr
         elif args.schedule == 'step':
-            lr_scheduler = tf.keras.optimizers.schedules.ExponentialDecay(
-                args.lr, 
-                args.step_size, 
-                args.gamma, 
-                staircase=True)
+            def lr_scheduler(epoch, lr):
+                return lr * args.gamma if epoch % args.step_size == 0 else lr
         else:
             raise Exception('LR Scheduler undefined!')
         return lr_scheduler

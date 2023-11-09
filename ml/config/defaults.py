@@ -77,14 +77,14 @@ _C.TRAIN.LEN.early_stop = 2
 _C.TRAIN.OPTIM = CN()
 # algorithm to use for optimization
 _C.TRAIN.OPTIM.optim = "sgd"
+# initial learning rate for training
+_C.TRAIN.OPTIM.lr = 0.005
 # momentum factor for SGD, or beta1 for Adam optimizer
 _C.TRAIN.OPTIM.momentum = 0.9
 # L2 penalty (regularization term) parameter
 _C.TRAIN.OPTIM.weight_decay = 0.0005
 
 _C.TRAIN.LR = CN()
-# initial learning rate for training
-_C.TRAIN.LR.lr = 0.005
 # learning rate scheduling method
 _C.TRAIN.LR.schedule = 'step'
 # number of epochs between learning rate reductions
