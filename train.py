@@ -43,12 +43,11 @@ def main(cfg):
         
     model = ModelBuilder.build_classifier(cfg.MODEL, '', cfg.DATASET.num_classes)
     optimizer = OptimizerBuilder.build_optimizer(cfg.TRAIN.OPTIM)
-    loss = tf.keras.losses.CategoricalCrossentropy()
+    loss = tf.keras.losses.SparseCategoricalCrossentropy()
     metrics = [
-        tf.keras.metrics.CategoricalAccuracy(name='acc'),
-        tf.keras.metrics.Precision(name='prec'),
-        tf.keras.metrics.Recall(name='rec'),
+        tf.keras.metrics.SparseCategoricalAccuracy(name='acc'),
     ]
+
 
     lr_scheduler = LRScheduleBuilder.build_scheduler(cfg.TRAIN.LR)
     lr_callback = tf.keras.callbacks.LearningRateScheduler(lr_scheduler)
