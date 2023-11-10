@@ -13,9 +13,6 @@ from contextlib import redirect_stdout
 # ml
 import tensorflow as tf
 
-# seeding randomness
-import numpy as np
-
 # training
 from ml.config import cfg
 from ml.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder
