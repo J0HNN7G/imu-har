@@ -11,7 +11,21 @@ def drop_unwanted_columns(dataframe):
 
 
 def get_sliding_windows(data, window_size, overlap_size):
-    return sliding_window_view(data, window_size, axis=0)[::(overlap_size * window_size)]
+    # Ensure the step size is positive and smaller than the window size
+    step_size = window_size - overlap_size
+    if step_size <= 0:
+        raise ValueError("Overlap size must be smaller than the window size.")
+
+    # Create the sliding windows using sliding_window_view
+    sliding_windows = sliding_window_view(data, window_shape=(window_size,), axis=0)
+
+    # Use the `::` operator to select every nth window, where n is the step size
+    windows = sliding_windows[::step_size]
+
+    # Transpose the array to match the shape expected by the model
+    windows = windows.transpose(0, 2, 1)
+
+    return windows
 
 
 def odgt2data(odgt_fp, window_size, overlap_size, num_classes):

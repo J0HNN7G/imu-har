@@ -4,31 +4,6 @@
 import tensorflow as tf
 
 
-def get_num_sensors(args):
-    if args.sensor == 'all':
-        num_sensors = 6
-    elif args.sensor == 'accel':
-        num_sensors = 3
-    elif args.sensor == 'gyro':
-        num_sensors = 3
-    else:
-        raise Exception(f'Sensor undefined!: {args.sensor}')
-    return num_sensors
-
-def get_per_sensor_size(args):
-    if args.format == 'normal':
-        num_per_sensor = args.window_size
-    elif args.format == 'summary':
-        num_per_sensor =  2
-    else:
-        raise Exception(f'Input format undefined!: {args.format}')
-    return num_per_sensor
-
-def get_input_shape(args):
-    return (get_num_sensors(args) * get_per_sensor_size(args),)
-
-
-
 class InputTransformBuilder:
     """
     Builder class for transforming input to features for classfication models.
@@ -37,7 +12,7 @@ class InputTransformBuilder:
     - build_transform(args): Build a transform builder for classifier model.
     """
     @staticmethod
-    def build_transform(args):
+    def build_transform(args, is_rnn=False):
         """
         Build a transform for the input.
 
@@ -47,20 +22,36 @@ class InputTransformBuilder:
         Returns:
         - a transform function
         """
+        if is_rnn and (args.format != 'window'):
+            raise Exception('RNNs require window format!')
+        elif (not is_rnn) and (args.format == 'window'):
+            raise Exception('only RNNs can use window format!')
+
         transform = tf.keras.Sequential()
 
         # what sensors to use
         if args.sensor == 'all':
             pass
         elif args.sensor == 'accel':
-            transform.add(tf.keras.layers.Lambda(lambda x: x[:, 0:3]))
+            sensors = tf.keras.layers.Lambda(lambda x: x[:, 0:3])
+            transform.add(sensors)
         elif args.sensor == 'gyro':
-            transform.add(tf.keras.layers.Lambda(lambda x: x[:, 3:6]))
+            sensors = tf.keras.layers.Lambda(lambda x: x[:, 3:6])
+            transform.add(sensors)
         else:
             raise Exception('Sensor undefined!')
 
         # how to process that data
-        if args.format == 'normal':
+        if (args.format == 'window'):
+            pass
+        elif (args.format == 'normal'):
+            format = tf.keras.layers.Flatten()
+            transform.add(format)
+        elif args.format == 'summary':
+            format = tf.keras.layers.Lambda(lambda x: tf.concat([tf.math.reduce_mean(x, axis=1),
+                                                                 tf.math.reduce_std(x, axis=1)], 
+                                                                 axis=1))
+            transform.add(format)
             transform.add(tf.keras.layers.Flatten())
         else:
             raise Exception('Transform undefined!')
@@ -89,23 +80,27 @@ class ModelBuilder:
         Returns:
         - classifier: A classifier model.
         """
-        transforms = InputTransformBuilder.build_transform(args.INPUT)
-
         classifier = tf.keras.Sequential()
-        classifier.add(transforms)
 
-        if args.ARCH.type == 'mlp':
-            for _ in range(args.ARCH.num_layers):
-                classifier.add(tf.keras.layers.Dense(units=args.ARCH.hidden_size, 
-                                                     activation='relu'))
-                classifier.add(tf.keras.layers.Dropout(args.ARCH.dropout))
-        elif args.ARCH.type == 'lstm':
-            classifier.add(tf.keras.layers.LSTM(args.ARCH.hidden_size))
-        elif args.ARCH.type == 'log':
-            pass
-        else:
-            raise Exception('Architecture undefined!')
-        
+        # format input
+        transforms = InputTransformBuilder.build_transform(args.INPUT, args.ARCH.LSTM.num_layers > 0)
+        if len(transforms.layers) > 0:
+            classifier.add(transforms)
+
+        # build layers
+        for i in range(args.ARCH.LSTM.num_layers):
+            if i < args.ARCH.LSTM.num_layers - 1:
+                classifier.add(tf.keras.layers.LSTM(args.ARCH.LSTM.hidden_size, 
+                                                    return_sequences=True))
+            else:
+                classifier.add(tf.keras.layers.LSTM(args.ARCH.LSTM.hidden_size, 
+                                                    return_sequences=False))
+
+        for _ in range(args.ARCH.MLP.num_layers):
+            classifier.add(tf.keras.layers.Dense(units=args.ARCH.MLP.hidden_size, 
+                                                 activation='relu'))
+            classifier.add(tf.keras.layers.Dropout(args.ARCH.MLP.dropout))
+
         classifier.add(tf.keras.layers.Dense(units=num_classes, activation='softmax'))
 
         pretrained = (len(weights) > 0)

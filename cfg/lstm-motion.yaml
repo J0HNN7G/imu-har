@@ -9,11 +9,12 @@ DATASET:
 MODEL:
   INPUT:
     sensor: "all"
-    format: "summary"
+    format: "window"
     window_size: 15
   ARCH:
     LSTM:
-      num_layers: 0
+      num_layers: 1
+      hidden_size: 16
     MLP:
       num_layers: 0
 

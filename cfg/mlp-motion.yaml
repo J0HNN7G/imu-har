@@ -15,7 +15,9 @@ MODEL:
     LSTM:
       num_layers: 0
     MLP:
-      num_layers: 0
+      num_layers: 3
+      hidden_size: 32
+      dropout: 0.2
 
 TRAIN:
   path: ""

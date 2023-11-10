@@ -32,7 +32,7 @@ Custom dataset files are expected to be formatted as follows:
 
 2. Make configuration YAML file. 
 
-Example `log-motion.yaml`:
+Example `mlp-motion.yaml`:
 ```
 DATASET:
   path: ""
@@ -42,28 +42,29 @@ DATASET:
     val: "val_motion_pdiot-data.odgt"
     test: "test_motion_pdiot-data.odgt"
 
-
 MODEL:
   INPUT:
     sensor: "all"
-    format: "normal"
-    window_size: 25
+    format: "summary"
+    window_size: 15
   ARCH:
-    type: "log"
-
+    LSTM:
+      num_layers: 0
+    MLP:
+      num_layers: 3
+      hidden_size: 32
+      dropout: 0.2
 
 TRAIN:
   path: ""
-  seed: -1
   DATA:
-    overlap_size: 10
-    batch_size: 64
+    overlap_size: 5
+    batch_size: 128
   LEN:
     num_epoch: 100
-    start_epoch: 0
     early_stop: 10
   OPTIM:
-    optim: "sgd"
+    optim: "adam"
     lr: 0.001
     momentum: 0.9
     weight_decay: 0.0005

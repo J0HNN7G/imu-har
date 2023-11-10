@@ -37,14 +37,23 @@ _C.MODEL.INPUT.window_size = 25
 
 # model architecture specification
 _C.MODEL.ARCH = CN()
-# type of model architecture (log, mlp, lstm)
-_C.MODEL.ARCH.type = "mlp"
-# size of hidden layers for MLP or LSTM
-_C.MODEL.ARCH.hidden_size = 256
-# number of hidden layers for MLP or LSTM
-_C.MODEL.ARCH.num_layers = 2
+
+# LSTM architecture specification
+_C.MODEL.ARCH.LSTM = CN()
+# number of hidden layers for LSTM
+_C.MODEL.ARCH.LSTM.num_layers = 0
+# size of hidden layers for LSTM
+_C.MODEL.ARCH.LSTM.hidden_size = 16
+
+# MLP architecture specification
+_C.MODEL.ARCH.MLP = CN()
+# number of hidden layers for MLP
+_C.MODEL.ARCH.MLP.num_layers = 0
+# size of hidden layers for MLP
+_C.MODEL.ARCH.MLP.hidden_size = 32
 # dropout rate for regularization for MLP
-_C.MODEL.ARCH.dropout = 0.5
+_C.MODEL.ARCH.MLP.dropout = 0.2
+
 # -----------------------------------------------------------------------------
 # Training
 # -----------------------------------------------------------------------------
@@ -56,7 +65,7 @@ _C.TRAIN.DATA = CN()
 # window overlap size in sliding window analysis
 _C.TRAIN.DATA.overlap_size = 10
 # number of samples per gradient update
-_C.TRAIN.DATA.batch_size = 32
+_C.TRAIN.DATA.batch_size = 128
 
 _C.TRAIN.LEN = CN()
 # total number of training epochs

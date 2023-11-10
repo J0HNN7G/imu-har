@@ -51,7 +51,6 @@ def main(cfg):
         tf.keras.metrics.CategoricalAccuracy(name='acc'),
         tf.keras.metrics.Precision(name='prec'),
         tf.keras.metrics.Recall(name='rec'),
-        tf.keras.metrics.AUC(name='auc')
     ]
 
     lr_scheduler = LRScheduleBuilder.build_scheduler(cfg.TRAIN.LR)
