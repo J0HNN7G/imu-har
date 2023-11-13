@@ -22,16 +22,16 @@ TASK_CATEGORIES = {
 activity_list = [
     'sitting',
     'standing',
-    'lying down on left',
-    'lying down right',
-    'lying down back',
-    'lying down on stomach',
-    'normal walking',
+    'lyingLeft',
+    'lyingRight',    
+    'lyingBack',
+    'lyingStomach',
+    'normalWalking',
     'running',
-    'descending stairs',
-    'ascending stairs',
-    'shuffle walking',
-    'miscellaneous movements'
+    'descending',
+    'ascending',
+    'shuffleWalking',
+    'miscMovement'
 ]
 activity_idxs = [0] + list(range(len(activity_list)-1))
 activity_dict = dict(zip(activity_list, activity_idxs))
@@ -39,7 +39,7 @@ activity_max_len = max(activity_dict.values()) + 1
 
 
 breathing_list = [
-    'normal',
+    'breathingNormal',
     'coughing',
     'hyperventilating',
     'singing',
@@ -68,7 +68,7 @@ dynamic_max_len = max(dynamic_dict.values()) + 1
 
 def parse_metadata(data_fp):
     parts = data_fp.split('/')[-1].split('_')
-    return parts[0], parts[1], parts[2], parts[3]
+    return parts[0], parts[1], parts[2], parts[3].replace('.csv','')
 
 
 def get_label(task, data_fp):
@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # Prepare dataset file paths
     print('Starting ODGT file creation')
     dataset_dir = os.path.join(args.dir, DATASET_NAME)
-    data_fps = glob.glob(f'{dataset_dir}/anonymized_dataset_2023/*/*/*')
+    data_fps = glob.glob(f'{dataset_dir}/updated_anonymized_dataset_2023/*/*/*')
 
     # Filter and label data file paths
     data_fps_valid, labels = [], []
