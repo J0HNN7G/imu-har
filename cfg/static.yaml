@@ -1,18 +1,17 @@
 DATASET:
   path: ""
-  num_classes: 4  # change to 4 if other is included
+  num_classes: 5
   LIST:
-    train: "train_breathing_pdiot-data.odgt"
-    val: "val_breathing_pdiot-data.odgt"
-    test: "test_breathing_pdiot-data.odgt"
+    train: "train_static_pdiot-data.odgt"
+    val: "val_static_pdiot-data.odgt"
+    test: "test_static_pdiot-data.odgt"
 
 MODEL:
   INPUT:
-    sensor: "all"  #defined in slurm script
+    sensor: "all"
     format: "window"
     window_size: 15
   ARCH:
-  #all this will be defined in slurm script
     LSTM:
       num_layers: 1
       hidden_size: 16
