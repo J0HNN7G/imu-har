@@ -15,7 +15,7 @@ import tensorflow as tf
 
 # training
 from ml.config import cfg
-from ml.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder
+from ml.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder, TimingCallback
 from ml.dataset import odgt2data
 
 
@@ -29,6 +29,7 @@ def main(cfg):
     Returns:
     None
     """
+    logging.info('Training Starting!')
     # model
     train_odgt_fp = os.path.join(cfg.DATASET.path, cfg.DATASET.LIST.train)
     val_odgt_fp = os.path.join(cfg.DATASET.path, cfg.DATASET.LIST.val)
@@ -48,33 +49,34 @@ def main(cfg):
         tf.keras.metrics.SparseCategoricalAccuracy(name='acc'),
     ]
 
-
     lr_scheduler = LRScheduleBuilder.build_scheduler(cfg.TRAIN.LR)
     lr_callback = tf.keras.callbacks.LearningRateScheduler(lr_scheduler)
 
     early_stop_callback = tf.keras.callbacks.EarlyStopping(monitor='val_acc', patience=cfg.TRAIN.LEN.early_stop)
 
     checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath=os.path.join(cfg.TRAIN.path, cfg.TRAIN.FN.weight),
+        filepath=os.path.join(cfg.TRAIN.path, 'weights.hdf5'),
         save_weights_only=True,
         monitor='val_acc',
         mode='max',
         save_best_only=True)
 
+    timing_callback = TimingCallback()
+
     history_callback = tf.keras.callbacks.CSVLogger(
-        os.path.join(cfg.TRAIN.path, cfg.TRAIN.FN.history), 
+        os.path.join(cfg.TRAIN.path, 'history.csv'), 
         separator=',', 
         append=False)
-
+    
     model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
-    # train + evaluate
-    with redirect_stdout(logging):
-        model.fit(train_X, train_y, validation_data=(val_X, val_y), 
+
+    model.fit(train_X, train_y, validation_data=(val_X, val_y), 
                 epochs=cfg.TRAIN.LEN.num_epoch, 
                 batch_size=cfg.TRAIN.DATA.batch_size,
                 callbacks=[lr_callback, 
                             early_stop_callback,
                             checkpoint_callback,
+                            timing_callback,
                             history_callback])
 
     logging.info('Training Done!')

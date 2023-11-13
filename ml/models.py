@@ -3,6 +3,19 @@
 # architectures
 import tensorflow as tf
 
+# timing
+from timeit import default_timer as timer
+
+
+class TimingCallback(tf.keras.callbacks.Callback):
+    """
+    Keep track of time per epoch.
+    """
+    def on_epoch_begin(self, epoch, logs):
+        self.starttime = timer()
+    def on_epoch_end(self, epoch, logs):
+        logs['time'] = timer()-self.starttime
+
 
 class InputTransformBuilder:
     """
