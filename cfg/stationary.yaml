@@ -1,6 +1,6 @@
 DATASET:
   path: ""
-  num_classes: 2
+  num_classes: 5
   LIST:
     train: "train_stationary_pdiot-data.odgt"
     val: "val_stationary_pdiot-data.odgt"
@@ -8,7 +8,7 @@ DATASET:
 
 MODEL:
   INPUT:
-    sensor: "all"
+    sensor: "all"  #defined in slurm script
     format: "window"
     window_size: 15
   ARCH:

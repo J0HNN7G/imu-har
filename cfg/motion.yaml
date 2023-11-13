@@ -8,7 +8,7 @@ DATASET:
 
 MODEL:
   INPUT:
-    sensor: "all"
+    sensor: "all"  #defined in slurm script
     format: "window"
     window_size: 15
   ARCH:
