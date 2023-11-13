@@ -22,14 +22,14 @@ TASK_CATEGORIES = {
 activity_list = [
     'sitting',
     'standing',
-    'lyingBack',
-    'lyingRight',
     'lyingLeft',
+    'lyingRight',    
+    'lyingBack',
     'lyingStomach',
-    'ascending',
-    'descending',
-    'running',
     'normalWalking',
+    'running',
+    'descending',
+    'ascending',
     'shuffleWalking',
     'miscMovement'
 ]
@@ -41,9 +41,9 @@ activity_max_len = max(activity_dict.values()) + 1
 breathing_list = [
     'breathingNormal',
     'coughing',
+    'hyperventilating',
     'singing',
     'eating',
-    'hyperventilating',
     'laughing',
     'talking'
 ]
