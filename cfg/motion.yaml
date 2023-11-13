@@ -12,6 +12,7 @@ MODEL:
     format: "window"
     window_size: 15
   ARCH:
+  #all this will be defined in slurm script
     LSTM:
       num_layers: 1
       hidden_size: 16
