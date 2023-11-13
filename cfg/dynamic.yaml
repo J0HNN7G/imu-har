@@ -1,22 +1,26 @@
 DATASET:
   path: ""
-  num_classes: 2
+  num_classes: 6
   LIST:
-    train: "train_motion_pdiot-data.odgt"
-    val: "val_motion_pdiot-data.odgt"
-    test: "test_motion_pdiot-data.odgt"
+    train: "train_dynamic_pdiot-data.odgt"
+    val: "val_dynamic_pdiot-data.odgt"
+    test: "test_dynamic_pdiot-data.odgt"
 
 MODEL:
   INPUT:
-    sensor: "all"
+    sensor: "all"  #defined in slurm script
     format: "window"
     window_size: 15
   ARCH:
+  #all this will be defined in slurm script
     LSTM:
       num_layers: 1
       hidden_size: 16
     MLP:
-      num_layers: 0
+      num_layers: 3
+      hidden_size: 32
+      dropout: 0.2
+
 
 TRAIN:
   path: ""
