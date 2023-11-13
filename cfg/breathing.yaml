@@ -1,6 +1,6 @@
 DATASET:
   path: ""
-  num_classes: 3  # change to 4 if other is included
+  num_classes: 4  # change to 4 if other is included
   LIST:
     train: "train_breathing_pdiot-data.odgt"
     val: "val_breathing_pdiot-data.odgt"
