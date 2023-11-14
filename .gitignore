@@ -9,6 +9,8 @@ slurm/*
 !slurm/slurm_check.py
 !slurm/slurm_gen.py
 !slurm/slurm_config_template.json
+!slurm/offline_arrayjob_template.sh
+!slurm/online_arrayjob_template.sh
 # wandb
 wandb/*
 !wandb/wandb_ckpt.py
