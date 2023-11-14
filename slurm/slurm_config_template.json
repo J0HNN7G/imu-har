@@ -1,11 +1,11 @@
 {
     "PERSONAL": {
-        "HOME": "",
+        "HOME": "/home",
         "USER": "",
         "PROJECT": "pdiot-ml"
     },
     "EDI": {
-        "HOME": "",
+        "HOME": "/home",
         "USER": "",
         "PROJECT": "pdiot-ml"
     },
@@ -14,18 +14,18 @@
         "USER" : "",
         "PROJECT" : "pdiot-ml"
     },
-    "ARCH": "",
-    "DATASET": "",
-    "CONFIG_DN": "config",
+    "TASK": "",
+    "DATASET": "pdiot-data",
+    "CONFIG_DN": "cfg",
     "DATA_DN": "data/sets",
     "CKPT_DN": "ckpt",
     "SLURM_DN": "slurm",
     "TRAIN_FN": "train.py",
     "EXP": {
-        "TSV": {
-            "DEFAULT_FN" : "EXP.tsv",
-            "FAILED_FN" : "EXP_FAIL.tsv",
-            "TIMEOUT_FN" : "EXP_TIMEOUT.tsv"
+        "CSV": {
+            "DEFAULT_FN" : "EXP.csv",
+            "FAILED_FN" : "EXP_FAIL.csv",
+            "TIMEOUT_FN" : "EXP_TIMEOUT.csv"
         }
     }
 }
