@@ -18,6 +18,10 @@ conda install pandas numpy scikit-learn
 
 # config, logging and metrics (not on conda)
 pip install wandb yacs --upgrade-strategy only-if-needed
+
+# for fully functionality
+cd <pdiot-ml_directory>
+pip setup.py install
 ```
 
 ## Training
@@ -86,10 +90,4 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 ├── history.csv             # training and validation metrics history
 ├── config.yaml             # configuration file (updated with train.py arguments)
 └── log.txt                 # model training logs
-```
-
-## Evaluation
-
-```
-python test.py -c <config_filepath> -i <test_odgt_dirpath>
 ```

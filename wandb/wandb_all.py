@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
             # setup logger
             cfg.TRAIN.log = os.path.join(cfg.TRAIN.path, cfg.TRAIN.FN.log)
-            cfg.TRAIN.history = os.path.join(cfg.TRAIN.path, cfg.TRAIN.FN.hist)
+            cfg.TRAIN.history = os.path.join(cfg.TRAIN.path, cfg.TRAIN.FN.history)
             assert os.path.exists(cfg.TRAIN.log), 'logs do not exist!'
             assert os.path.exists(cfg.TRAIN.history), 'history does not exist!'
             logging.basicConfig(level=logging.INFO,
