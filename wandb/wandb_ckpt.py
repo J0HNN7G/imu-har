@@ -16,7 +16,8 @@ MODEL_NAME  = 'model'
 TRAIN_NAME  = 'train'
 VAL_NAME = 'val'
 VALUE_NAME = 'acc'
-BEST_VALUE_NAME = f'best_{VAL_NAME}_{VALUE_NAME}'
+VAL_VALUE_NAME = f'{VAL_NAME}_{VALUE_NAME}'
+BEST_VALUE_NAME = f'best_{VAL_VALUE_NAME}'
 SEP = ','
 
 def main(cfg):
@@ -67,7 +68,7 @@ def main(cfg):
             f'{MODEL_NAME}/arch/mlp/num_layers' : cfg.MODEL.ARCH.MLP.num_layers,
             f'{MODEL_NAME}/arch/mlp/hidden_size' : cfg.MODEL.ARCH.MLP.hidden_size,
             f'{MODEL_NAME}/arch/mlp/dropout' : cfg.MODEL.ARCH.MLP.dropout,
-            f'{MODEL_NAME}/arch/lstm/hidden_size' : cfg.MODEL.ARCH.LSTM.hidden_size,
+            f'{MODEL_NAME}/arch/lstm/num_layers' : cfg.MODEL.ARCH.LSTM.num_layers,
             f'{MODEL_NAME}/arch/lstm/hidden_size' : cfg.MODEL.ARCH.LSTM.hidden_size,
         }
     )
@@ -78,7 +79,7 @@ def main(cfg):
             headers = lines[0].split(SEP)[1:]
 
             best_val = -1
-            val_idx = headers.index(VALUE_NAME)
+            val_idx = headers.index(VAL_VALUE_NAME)
 
             for content in lines[1:]:
                 content = content.split(SEP)[1:]
