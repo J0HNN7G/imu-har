@@ -84,7 +84,7 @@ if __name__ == '__main__':
     # parameters
     settings = []
 
-    window_size = [(15,12), (25,20)]
+    window_size = [(15,12)]
     sensor = ['all']
 
 

@@ -144,7 +144,7 @@ def indices2odgt(odgt_fp, indices, data_fps, labels):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="PDIoT Classification Dataset")
     parser.add_argument("-d", "--dir", required=True, help="Directory path to the dataset", type=str)
-    parser.add_argument("-t", "--task", default='static', help="Task for which to generate labels", type=str)
+    parser.add_argument("-t", "--task", default='breath', help="Task for which to generate labels", type=str)
     parser.add_argument("-s", "--split", action='store_false', help="Flag to not split into train, val, and test sets")
     args = parser.parse_args()
 
