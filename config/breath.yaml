@@ -2,7 +2,7 @@ DATASET:
   path: ""
   num_classes: 4
   LIST:
-    train: "train_breat_pdiot-data.odgt"
+    train: "train_breath_pdiot-data.odgt"
     val: "val_breath_pdiot-data.odgt"
     test: "test_breath_pdiot-data.odgt"
 
