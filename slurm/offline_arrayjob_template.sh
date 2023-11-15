@@ -172,7 +172,7 @@ python ${MAIN_PROJECT_PATH}/${DATA_DN}/${DATA_SCRIPT_FN} --dir ${SCRATCH_PROJECT
 experiment_file=$1
 ID=$[SLURM_ARRAY_TASK_ID + 1]
 EXP="`sed \"${ID}q;d\" ${experiment_file}`"
-IFS=$'\t' read -ra VALS <<< "$EXP"
+IFS=$',' read -ra VALS <<< "$EXP"
 
 LEN=${#VALS[@]}
 COMMAND=${VALS[$LEN - 1]}
