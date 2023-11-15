@@ -52,9 +52,9 @@ if __name__ == '__main__':
                                 cfg['EDI']['USER'], 
                                 cfg['EDI']['PROJECT'])
     slurm_path = os.path.join(project_path, cfg['SLURM_DN'])
-    exp_fp = os.path.join(slurm_path, cfg['EXP']['TSV']['DEFAULT_FN'])
-    exp_fail_fp = os.path.join(slurm_path, cfg['EXP']['TSV']['FAILED_FN'])
-    exp_timeout_fp = os.path.join(slurm_path, cfg['EXP']['TSV']['TIMEOUT_FN'])
+    exp_fp = os.path.join(slurm_path, cfg['EXP']['CSV']['DEFAULT_FN'])
+    exp_fail_fp = os.path.join(slurm_path, cfg['EXP']['CSV']['FAILED_FN'])
+    exp_timeout_fp = os.path.join(slurm_path, cfg['EXP']['CSV']['TIMEOUT_FN'])
 
     # different job status
     queuing_ids = []
