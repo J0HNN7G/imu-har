@@ -84,7 +84,7 @@ if __name__ == '__main__':
     # parameters
     settings = []
 
-    window_size = [(5,4), (10,8), (15,12), (20,16), (25,20)]
+    window_size = [(15,12), (25,20)]
     sensor = ['all']
 
 
@@ -112,8 +112,8 @@ if __name__ == '__main__':
     lstm_num_layers = [0]
     lstm_hidden_sizes = [0]
     mlp_num_layers = [2, 3, 4]
-    mlp_hidden_sizes = [32, 64, 128]
-    mlp_dropout = [0.0, 0.2, 0.5]
+    mlp_hidden_sizes = [64, 128, 256]
+    mlp_dropout = [0.2]
 
     param_list = [window_size, 
                   sensor, 
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     # lstm model
     format = ['window']
     lstm_num_layers = [1, 2]
-    lstm_hidden_sizes = [16, 32, 64]
+    lstm_hidden_sizes = [32, 64, 128]
     mlp_num_layers = [0]
     mlp_hidden_sizes = [0]
     mlp_dropout = [1.0]
