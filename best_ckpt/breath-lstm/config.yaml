@@ -8,14 +8,14 @@ DATASET:
 MODEL:
   ARCH:
     LSTM:
+      hidden_size: 128
+      num_layers: 1
+    MLP:
+      dropout: 1.0
       hidden_size: 0
       num_layers: 0
-    MLP:
-      dropout: 0.2
-      hidden_size: 256
-      num_layers: 3
   INPUT:
-    format: summary
+    format: window
     sensor: all
     window_size: 15
 TRAIN:
@@ -39,4 +39,4 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_17
+  path: /disk/scratch/s1915791/git/pdiot-ml/best_ckpt/breath-lstm

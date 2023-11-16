@@ -1,5 +1,5 @@
-[00:27:53 INFO train.py] Loaded configuration file: /home/s1915791/git/pdiot-ml/config/breath.yaml
-[00:27:53 INFO train.py] Running with config:
+[00:49:22 INFO train.py] Loaded configuration file: /home/s1915791/git/pdiot-ml/config/breath.yaml
+[00:49:22 INFO train.py] Running with config:
 DATASET:
   LIST:
     test: test_breath_pdiot-data.odgt
@@ -10,14 +10,14 @@ DATASET:
 MODEL:
   ARCH:
     LSTM:
+      hidden_size: 128
+      num_layers: 1
+    MLP:
+      dropout: 1.0
       hidden_size: 0
       num_layers: 0
-    MLP:
-      dropout: 0.2
-      hidden_size: 256
-      num_layers: 3
   INPUT:
-    format: summary
+    format: window
     sensor: all
     window_size: 15
 TRAIN:
@@ -41,9 +41,8 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_17
-[00:27:53 INFO train.py] Outputting to: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_17
-[00:27:53 INFO train.py] Training Starting!
-[02:26:17 INFO train.py] Training Done!
-[11:04:17 INFO wandb_all.py] Starting Wandb Logging for experiment breath_17
-[11:04:23 INFO wandb_ckpt.py] Wandb Logging Done!
+  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_23
+[00:49:22 INFO train.py] Outputting to: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_23
+[00:49:22 INFO train.py] Training Starting!
+[12:03:23 INFO wandb_ckpt.py] Starting Wandb Logging for experiment breath_23
+[12:03:33 INFO wandb_ckpt.py] Wandb Logging Done!
