@@ -21,7 +21,7 @@ pip install wandb yacs --upgrade-strategy only-if-needed
 
 # for fully functionality
 cd <pdiot-ml_directory>
-pip setup.py install
+python setup.py install
 ```
 
 ## Training
