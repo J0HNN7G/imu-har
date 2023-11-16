@@ -1,9 +1,9 @@
 DATASET:
   LIST:
-    test: test_static_pdiot-data.odgt
-    train: train_static_pdiot-data.odgt
-    val: val_static_pdiot-data.odgt
-  num_classes: 5
+    test: test_breath_pdiot-data.odgt
+    train: train_breath_pdiot-data.odgt
+    val: val_breath_pdiot-data.odgt
+  num_classes: 4
   path: /disk/scratch/s1915791/git/pdiot-ml/data/sets/pdiot-data
 MODEL:
   ARCH:
@@ -12,10 +12,10 @@ MODEL:
       num_layers: 0
     MLP:
       dropout: 0.2
-      hidden_size: 128
-      num_layers: 2
+      hidden_size: 256
+      num_layers: 3
   INPUT:
-    format: normal
+    format: summary
     sensor: all
     window_size: 15
 TRAIN:
@@ -39,4 +39,4 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/best_ckpt/static-mlp
+  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_17
