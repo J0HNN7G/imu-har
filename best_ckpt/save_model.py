@@ -23,7 +23,7 @@ for d in data:
     cfg.merge_from_file(config_file)
     model = ModelBuilder.build_classifier(cfg.MODEL, '', cfg.DATASET.num_classes)
     if cfg.MODEL.ARCH.LSTM.num_layers > 0:
-      	model.build((None,) + (None, 6))  
+      	model.build((1,) + (15, 6))  
     else:
     	model.build((None,) + (15, 6))
     model.save('temp_model')
