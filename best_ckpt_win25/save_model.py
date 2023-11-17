@@ -23,9 +23,9 @@ for d in data:
     cfg.merge_from_file(config_file)
     model = ModelBuilder.build_classifier(cfg.MODEL, '', cfg.DATASET.num_classes)
     if cfg.MODEL.ARCH.LSTM.num_layers > 0:
-      	model.build((1,) + (25, 6))  
+        model.build((1,) + (25, 6))  
     else:
-    	model.build((None,) + (25, 6))
+        model.build((None,) + (25, 6))
     model.save('temp_model')
     model.summary()
     converter = tf.lite.TFLiteConverter.from_saved_model('temp_model')
