@@ -1,5 +1,11 @@
 ### Personal ###
 TODO
+# configs
+config/*
+!config/breath.yaml
+!config/dynamic.yaml
+!config/motion.yaml
+!config/static.yaml
 # data
 data/sets/*
 # checkpoints
