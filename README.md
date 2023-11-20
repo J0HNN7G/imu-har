@@ -3,7 +3,10 @@ PDIoT 2023-2024 A1 ML model
 
 ## Structure
 
-![Diagram](docs/diagram.jpg)
+![Diagram](docs/system_architecture.png)
+
+![Diagram](docs/har_model.png)
+
 
 ##  Installation
 ```
