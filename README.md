@@ -14,7 +14,7 @@ conda activate <env_name>
 conda install tensorflow==2.11.0 
 
 # data processing
-conda install pandas numpy scikit-learn
+conda install pandas numpy scikit-learn tqdm
 
 # config, logging and metrics (not on conda)
 pip install wandb yacs --upgrade-strategy only-if-needed

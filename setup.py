@@ -24,6 +24,7 @@ setuptools.setup(
         'numpy',
         'scikit-learn',
         'wandb',
-        'yacs'
+        'yacs',
+        'tqdm'
     ]
 )
