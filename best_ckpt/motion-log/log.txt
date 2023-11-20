@@ -1,0 +1,49 @@
+[13:15:30 INFO train.py] Loaded configuration file: config/motion-log.yaml
+[13:15:30 INFO train.py] Running with config:
+DATASET:
+  LIST:
+    test: test_motion_pdiot-data.odgt
+    train: train_motion_pdiot-data.odgt
+    val: val_motion_pdiot-data.odgt
+  num_classes: 2
+  path: data/sets/pdiot-data
+MODEL:
+  ARCH:
+    LSTM:
+      hidden_size: 0
+      num_layers: 0
+    MLP:
+      dropout: 1.0
+      hidden_size: 0
+      num_layers: 0
+  INPUT:
+    format: summary
+    sensor: all
+    window_size: 15
+TRAIN:
+  DATA:
+    batch_size: 128
+    overlap_size: 12
+  FN:
+    config: config.yaml
+    history: history.csv
+    log: log.txt
+    weight: weights.hdf5
+  LEN:
+    early_stop: 10
+    num_epoch: 100
+  LR:
+    gamma: 0.1
+    schedule: step
+    step_size: 40
+  OPTIM:
+    lr: 0.001
+    momentum: 0.9
+    optim: adam
+    weight_decay: 0.0005
+  path: ckpt/motion-log
+[13:15:30 INFO train.py] Outputting to: ckpt/motion-log
+[13:15:30 INFO train.py] Training Starting!
+[13:31:19 INFO train.py] Training Done!
+[13:32:16 INFO wandb_ckpt.py] Starting Wandb Logging for experiment motion-log
+[13:32:22 INFO wandb_ckpt.py] Wandb Logging Done!
