@@ -7,6 +7,10 @@ import tensorflow as tf
 from timeit import default_timer as timer
 
 
+# number of sensors
+NUM_SENSORS = 6
+
+
 class TimingCallback(tf.keras.callbacks.Callback):
     """
     Keep track of time per epoch.
@@ -24,6 +28,29 @@ class InputTransformBuilder:
     Methods:
     - build_transform(args): Build a transform builder for classifier model.
     """
+
+    @staticmethod
+    def input_shape(args):
+        """
+        Calculate the input shape based on the configuration.
+
+        Args:
+        - args: input configuration
+
+        Returns:
+        - input shape (tuple)
+        """
+        num_sensors = 6  # Number of sensors is always 6
+
+        if args.format == 'window':
+            return (1, window_size, num_sensors)
+        else:
+            # For 'normal' and 'summary' formats
+            return (None, window_size, num_sensors)
+
+        return None  # Default case, though it should be handled in build_transform
+
+
     @staticmethod
     def build_transform(args, is_rnn=False):
         """
@@ -56,11 +83,13 @@ class InputTransformBuilder:
 
         # how to process that data
         if (args.format == 'window'):
-            pass
+            input_shape = (None, None, NUM_SENSORS)
         elif (args.format == 'normal'):
+            input_shape = (None, args.window_size, NUM_SENSORS)
             format = tf.keras.layers.Flatten()
             transform.add(format)
         elif args.format == 'summary':
+            input_shape = (None, args.window_size, NUM_SENSORS)
             format = tf.keras.layers.Lambda(lambda x: tf.concat([tf.math.reduce_mean(x, axis=1),
                                                                  tf.math.reduce_std(x, axis=1)], 
                                                                  axis=1))
@@ -69,7 +98,7 @@ class InputTransformBuilder:
         else:
             raise Exception('Transform undefined!')
         
-        return transform
+        return transform, input_shape
     
 
 
@@ -96,7 +125,7 @@ class ModelBuilder:
         classifier = tf.keras.Sequential()
 
         # format input
-        transforms = InputTransformBuilder.build_transform(args.INPUT, args.ARCH.LSTM.num_layers > 0)
+        transforms, input_size = InputTransformBuilder.build_transform(args.INPUT, args.ARCH.LSTM.num_layers > 0)
         if len(transforms.layers) > 0:
             classifier.add(transforms)
 
@@ -118,6 +147,7 @@ class ModelBuilder:
 
         pretrained = (len(weights) > 0)
         if pretrained:
+            classifier.build(input_size)
             classifier.load_weights(weights)
 
         return classifier
