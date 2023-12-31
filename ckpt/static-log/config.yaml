@@ -11,11 +11,11 @@ MODEL:
       hidden_size: 0
       num_layers: 0
     MLP:
-      dropout: 0.2
-      hidden_size: 128
-      num_layers: 2
+      dropout: 1.0
+      hidden_size: 0
+      num_layers: 0
   INPUT:
-    format: normal
+    format: summary
     sensor: all
     window_size: 15
 TRAIN:
@@ -39,4 +39,4 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/best_ckpt/static-mlp
+  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/static-log

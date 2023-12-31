@@ -39,4 +39,4 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: best_ckpt/motion-log
+  path: ckpt/motion-log

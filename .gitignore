@@ -10,6 +10,13 @@ config/*
 data/sets/*
 # checkpoints
 ckpt/*
+!ckpt/breath-lstm/
+!ckpt/dynamic-lstm/
+!ckpt/motion-log/
+!ckpt/motion-mlp/
+!ckpt/static-log/
+!ckpt/static-mlp/
+!ckpt/to_android.py
 # slurm
 slurm/*
 !slurm/slurm_check.py
