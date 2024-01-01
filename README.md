@@ -1,4 +1,4 @@
-# IMU Activity Recognition with TensorFlow
+# IMU Activity Recognition for Android
 
 ## Structure
 
