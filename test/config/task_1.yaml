@@ -1,0 +1,13 @@
+DATASET:
+  path: ""
+  task: 1
+
+HAR:
+  MOTION:
+    config: "config/motion.yaml"
+  DYNAMIC:
+    config: "config/dynamic.yaml"
+  STATIC:
+    config: "config/static.yaml"
+  BREATH:
+    config: "config/breath.yaml"

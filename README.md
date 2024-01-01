@@ -94,3 +94,50 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 ├── config.yaml             # configuration file (updated with train.py arguments)
 └── log.txt                 # model training logs
 ```
+
+## Leave-One-Out (LOO) Testing
+1. Format activity classification dataset for your test task. Example scripts found in `data`.
+
+Custom dataset files are expected to be formatted as follows:
+```
+{ 'filepath': <data_csv_filepath>, 'annotation': [<motion_label>, 
+                                                  <dynamic_label>,
+                                                  <static_label>,
+                                                  <breath_label>]}
+...
+```
+
+
+2. Make configuration YAML file. 
+
+Example `task_1.yaml`:
+```
+DATASET:
+  path: ""
+  task: 1
+
+HAR:
+  MOTION:
+    config: "config/motion.yaml"
+  DYNAMIC:
+    config: "config/dynamic.yaml"
+  STATIC:
+    config: "config/static.yaml"
+  BREATH:
+    config: "config/breath.yaml"
+```
+
+3. Run the testing
+```
+python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpath>
+```
+
+4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
+```
+<DIR>
+├── history.csv             # LOO training history
+├── result.csv              # LOO test results
+├── confusion.txt           # LOO test confusion matrix 
+├── config.yaml             # configuration file (updated with test.py arguments)
+└── log.txt                 # LOO test logs
+```

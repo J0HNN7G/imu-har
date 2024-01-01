@@ -75,7 +75,7 @@ def get_label(task, data_fp):
     user, device, activity, breathing = parse_metadata(data_fp)
 
     # Exclude certain users or devices
-    if (device != 'respeck') or (user == 'S37'):
+    if (device != 'respeck'):
         return -1
     
     # Check if activity is valid

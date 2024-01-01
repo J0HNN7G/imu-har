@@ -9,6 +9,7 @@ config/*
 # data
 data/sets/*
 # checkpoints
+test/ckpt/*
 ckpt/*
 !ckpt/breath-lstm/
 !ckpt/dynamic-lstm/
@@ -16,7 +17,7 @@ ckpt/*
 !ckpt/motion-mlp/
 !ckpt/static-log/
 !ckpt/static-mlp/
-!ckpt/to_android.py
+!ckpt/tflite_all.py
 # slurm
 slurm/*
 !slurm/slurm_check.py
@@ -29,9 +30,6 @@ wandb/*
 !wandb/wandb_ckpt.py
 !wandb/wandb_all.py
 !wandb/wandb_key_template.txt
-# tf
-best_ckpt_win15/temp_model/
-best_ckpt_win25/temp_model/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,java,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,java,jupyternotebooks

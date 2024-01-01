@@ -9,16 +9,16 @@ DATASET:
 MODEL:
   INPUT:
     sensor: "all"
-    format: "window"
+    format: "summary"
     window_size: 15
   ARCH:
     LSTM:
-      num_layers: 1
-      hidden_size: 16
+      num_layers: 0
+      hidden_size: 0
     MLP:
-      num_layers: 3
-      hidden_size: 32
-      dropout: 0.2
+      num_layers: 0
+      hidden_size: 0
+      dropout: 1.0
 
 
 TRAIN:
