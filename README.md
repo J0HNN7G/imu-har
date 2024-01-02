@@ -10,6 +10,7 @@ IMU Activity Data: https://github.com/specknet/pdiot-data
 
 
 #### TASK 1: CLASSIFICATION OF GENERAL HUMAN ACTIVITIES
+*Only use data collected during normal breathing!*
 ```
 class 0: sitting/standing
 class 1: lying down on your left side
@@ -25,6 +26,7 @@ class 10: miscellaneous movements
 ```
 
 #### TASK 2: CLASSIFICATION OF STATIONARY ACTIVITIES WITH RESPIRATORY SYMPTOMS
+*Do not include any data files/recordings that contain laughing, singing, eating, or talking!*
 ```
 class 0: sitting/standing + breathing normally
 class 1: lying down on your left side + breathing normally
