@@ -99,10 +99,10 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 
 Custom dataset files are expected to be formatted as follows:
 ```
-{ 'filepath': <data_csv_filepath>, 'annotation': [<motion_label>, 
-                                                  <dynamic_label>,
-                                                  <static_label>,
-                                                  <breath_label>]}
+{ 'filepath': <data_csv_filepath>, 'annotation': <class>, 'labels': [<motion_label>, 
+                                                                     <dynamic_label>,
+                                                                     <static_label>,
+                                                                     <breath_label>]}
 ...
 ```
 
