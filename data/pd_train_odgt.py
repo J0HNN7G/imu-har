@@ -145,7 +145,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="PDIoT Classification Dataset")
     parser.add_argument("-d", "--dir", required=True, help="Directory path to the dataset", type=str)
     parser.add_argument("-t", "--task", default='breath', help="Task for which to generate labels", type=str)
-    parser.add_argument("-s", "--split", action='store_false', help="Flag to not split into train, val, and test sets")
+    parser.add_argument("-s", "--split", action='store_false', help="Flag to not split into train and val sets")
     args = parser.parse_args()
 
     # Validate input directory and task
@@ -176,7 +176,7 @@ if __name__ == '__main__':
             indices[limit:],
         ]
 
-        # Generate ODGT files for train, validation, and test splits
+        # Generate ODGT files for train and validation splits
         for i, split in enumerate(TASK_NAMES[:2]):
             odgt_fp = os.path.join(dataset_dir, f'{split}_{args.task}_{ODGT_FILE_FORMAT}')
             if not os.path.exists(odgt_fp):
