@@ -51,7 +51,7 @@ if __name__ == '__main__':
     project_path = os.path.join(cfg['EDI']['HOME'], 
                                 cfg['EDI']['USER'], 
                                 cfg['EDI']['PROJECT'])
-    slurm_path = os.path.join(project_path, cfg['SLURM_DN'])
+    slurm_path = os.path.join(project_path, cfg['SLURM_DN'], 'train')
     exp_fp = os.path.join(slurm_path, cfg['EXP']['CSV']['DEFAULT_FN'])
     exp_fail_fp = os.path.join(slurm_path, cfg['EXP']['CSV']['FAILED_FN'])
     exp_timeout_fp = os.path.join(slurm_path, cfg['EXP']['CSV']['TIMEOUT_FN'])

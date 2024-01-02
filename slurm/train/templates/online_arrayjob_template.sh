@@ -2,7 +2,7 @@
 # Author(s): James Owers (james.f.owers@gmail.com), Jonathan Gustafsson Frennert (jonathan.frennert@gmail.com)
 #
 # Run an sbatch arrayjob with a file containing a list of
-# commands to run with PennFudanPed dataset on offline node.
+# commands to run with PennFudanPed dataset on online node.
 # 
 # Assuming this file has been edited and renamed slurm_arrayjob.sh, here's an
 # example usage:
@@ -34,11 +34,14 @@ SCRATCH_PATH=${SCRATCH_HOME}/${SCRATCH_USER}
 SCRATCH_PROJECT_PATH=${SCRATCH_PATH}/${SCRATCH_PROJECT}
 
 DATA_DN=data
+DATASET_NAME=pdiot-data
 OUTPUT_DN=ckpt
 INPUT_PATH=${DATA_DN}/sets
 
-DATA_SCRIPT_FN=pd_odgt.py
-
+DATA_SCRIPT_FN=pd_train_odgt.py
+DATA_LOG_FN=wandb_ckpt.py
+DATA_LOG_KEY_FN=wandb_key.txt
+DATA_LINK=git@github.com:specknet/pdiot-data.git
 
 # ====================
 # Options for sbatch
@@ -111,45 +114,18 @@ echo "Activating conda environment: ${CONDA_ENV_NAME}"
 conda activate ${CONDA_ENV_NAME}
 
 
-# =================================
-# Move input data to scratch disk
-# =================================
-# Move data from a source location, probably on the distributed filesystem
-# (DFS), to the scratch space on the selected node. Your code should read and
-# write data on the scratch space attached directly to the compute node (i.e.
-# not distributed), *not* the DFS. Writing/reading from the DFS is extremely
-# slow because the data must stay consistent on *all* nodes. This constraint
-# results in much network traffic and waiting time for you!
-#
-# This example assumes you have a folder containing all your input data on the
-# DFS, and it copies all that data  file to the scratch space, and unzips it. 
-#
-# For more guidelines about moving files between the distributed filesystem and
-# the scratch space on the nodes, see:
-#     http://computing.help.inf.ed.ac.uk/cluster-tips
+# =====================================
+# Download input data to scratch disk
+# =====================================
+# downloading input data zip to scratch disk and uncompressing it
 
-echo "Moving input data to the compute node's scratch space: $SCRATCH_HOME"
-
-# input data directory path on the DFS
-src_path=${MAIN_PROJECT_PATH}/${INPUT_PATH}
-
+echo "Downloading input data to the compute node's scratch space: $SCRATCH_HOME"
 
 # input data directory path on the scratch disk of the node
 dest_path=${SCRATCH_PROJECT_PATH}/${INPUT_PATH}
 mkdir -p ${dest_path}  # make it if required
 
-# Important notes about rsync:
-# * the --compress option is going to compress the data before transfer to send
-#   as a stream. THIS IS IMPORTANT - transferring many files is very very slow
-# * the final slash at the end of ${src_path}/ is important if you want to send
-#   its contents, rather than the directory itself. For example, without a
-#   final slash here, we would create an extra directory at the destination:
-#       ${SCRATCH_HOME}/project_name/data/input/input
-# * for more about the (endless) rsync options, see the docs:
-#       https://download.samba.org/pub/rsync/rsync.html
-
-rsync --archive --update --compress --progress ${src_path}/ ${dest_path}
-
+git clone ${DATA_GIT} ${dest_path}/${DATASET_NAME}
 
 # ======================
 # Pre-processing data
@@ -198,6 +174,17 @@ EXP_NAME=${VALS[$LEN - 2]}
 src_path=${SCRATCH_PROJECT_PATH}/${OUTPUT_DN}/${EXP_NAME}
 dest_path=${MAIN_PROJECT_PATH}/${OUTPUT_DN}/${EXP_NAME}
 rsync --archive --update --compress --progress ${src_path}/ ${dest_path}
+
+
+# ======================================
+# Wandb upload
+# ======================================
+# transfer output logs to wandb. Currently does not work.
+
+#echo "Log uploaded to wandb"
+
+#wandb login $(head ${MAIN_PROJECT_PATH}/${WANDB_DN}/${DATA_LOG_KEY_FN})
+#python ${MAIN_PROJECT_PATH}/${WANDB_DN}/${DATA_LOG_FN} -c ${src_path}
 
 
 # ======================================

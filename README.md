@@ -117,13 +117,13 @@ DATASET:
 
 HAR:
   MOTION:
-    config: "config/motion.yaml"
+    config: "config/train/motion.yaml"
   DYNAMIC:
-    config: "config/dynamic.yaml"
+    config: "config/train/dynamic.yaml"
   STATIC:
-    config: "config/static.yaml"
+    config: "config/train/static.yaml"
   BREATH:
-    config: "config/breath.yaml"
+    config: "config/train/breath.yaml"
 ```
 
 3. Run the testing

@@ -11,7 +11,7 @@ from importlib import reload
 from tqdm import tqdm
 
 # main function
-from wandb_ckpt import main
+from wandb.train.scripts.log_ckpt import main
 
 
 if __name__ == '__main__':

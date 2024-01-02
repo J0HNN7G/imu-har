@@ -2,34 +2,28 @@
 TODO
 # configs
 config/*
-!config/breath.yaml
-!config/dynamic.yaml
-!config/motion.yaml
-!config/static.yaml
+!config/train/
+!config/test/
 # data
 data/sets/*
 # checkpoints
-test/ckpt/*
 ckpt/*
-!ckpt/breath-lstm/
-!ckpt/dynamic-lstm/
-!ckpt/motion-log/
-!ckpt/motion-mlp/
-!ckpt/static-log/
-!ckpt/static-mlp/
-!ckpt/tflite_all.py
+!ckpt/train/
+!ckpt/test/
 # slurm
-slurm/*
-!slurm/slurm_check.py
-!slurm/slurm_gen.py
-!slurm/slurm_config_template.json
-!slurm/offline_arrayjob_template.sh
-!slurm/online_arrayjob_template.sh
+slurm/config/*
+!slurm/config/template.json
+slurm/train/*
+!slurm/train/templates/
+!slurm/train/scripts/
+slurm/test/*
+!slurm/test/templates/
+!slurm/test/scripts/
 # wandb
-wandb/*
-!wandb/wandb_ckpt.py
-!wandb/wandb_all.py
-!wandb/wandb_key_template.txt
+wandb/keys/*
+!wandb/keys/template.txt
+wandb/train/*
+!wandb/train/scripts/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,java,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,java,jupyternotebooks

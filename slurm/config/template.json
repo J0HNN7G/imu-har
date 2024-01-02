@@ -14,7 +14,6 @@
         "USER" : "",
         "PROJECT" : "pdiot-ml"
     },
-    "TASK": "",
     "DATASET": "pdiot-data",
     "CONFIG_DN": "cfg",
     "DATA_DN": "data/sets",

@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
 
     # generation
-    main_slurm_path = os.path.join(main_project_path, cfg['SLURM_DN'])
+    main_slurm_path = os.path.join(main_project_path, cfg['SLURM_DN'], 'train')
     main_exp_path = os.path.join(main_slurm_path, cfg['EXP']['CSV']['DEFAULT_FN'])
     # clear csv and create header
     with open(main_exp_path, 'w') as f:
