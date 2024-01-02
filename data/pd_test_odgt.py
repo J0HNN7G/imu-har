@@ -169,6 +169,6 @@ if __name__ == '__main__':
         
         test_static_fps, test_static_labels = generate_data(test_student_fp, 'static')
         test_breath_fps, test_breath_labels = generate_data(test_student_fp, 'breath')
-        
     else:
         raise ValueError("Unrecognized task.")
+    
