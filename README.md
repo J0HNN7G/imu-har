@@ -82,10 +82,10 @@ conda activate <env_name>
 conda install tensorflow==2.11.0 
 
 # data processing
-conda install pandas numpy scikit-learn tqdm
+conda install numpy pandas tqdm
 
-# config, logging and metrics (not on conda)
-pip install wandb yacs --upgrade-strategy only-if-needed
+# config, logging (not on conda)
+pip install yacs wandb --upgrade-strategy only-if-needed
 
 # for fully functionality
 cd <pdiot-ml_directory>

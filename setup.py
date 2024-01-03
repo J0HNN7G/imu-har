@@ -20,11 +20,10 @@ setuptools.setup(
     ),
     install_requires=[
         'tensorflow',
-        'pandas',
         'numpy',
-        'scikit-learn',
-        'wandb',
+        'pandas',
+        'tqdm',
         'yacs',
-        'tqdm'
+        'wandb'
     ]
 )
