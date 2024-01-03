@@ -74,6 +74,7 @@ class 19: lying down on your stomach + other
 
 
 ##  Installation
+Using Python 3.10.13:
 ```
 conda create -n <env_name>
 conda activate <env_name>
