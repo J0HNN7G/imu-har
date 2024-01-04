@@ -2,7 +2,7 @@ import os
 import glob
 import tensorflow as tf
 
-from ml.config import cfg
+from ml.config.train import cfg
 from ml.models import ModelBuilder
 
 def main():

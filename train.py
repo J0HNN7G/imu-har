@@ -14,7 +14,7 @@ from contextlib import redirect_stdout
 import tensorflow as tf
 
 # training
-from ml.config import cfg
+from ml.config.train import cfg
 from ml.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder, TimingCallback
 from ml.dataset import odgt2data
 

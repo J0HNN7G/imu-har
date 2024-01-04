@@ -1,6 +1,5 @@
 DATASET:
   LIST:
-    test: test_static_pdiot-data.odgt
     train: train_static_pdiot-data.odgt
     val: val_static_pdiot-data.odgt
   num_classes: 5

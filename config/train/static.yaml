@@ -4,7 +4,6 @@ DATASET:
   LIST:
     train: "train_static_pdiot-data.odgt"
     val: "val_static_pdiot-data.odgt"
-    test: "test_static_pdiot-data.odgt"
 
 MODEL:
   INPUT:

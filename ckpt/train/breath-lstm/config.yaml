@@ -1,6 +1,5 @@
 DATASET:
   LIST:
-    test: test_breath_pdiot-data.odgt
     train: train_breath_pdiot-data.odgt
     val: val_breath_pdiot-data.odgt
   num_classes: 4

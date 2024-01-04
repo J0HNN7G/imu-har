@@ -3,9 +3,6 @@ DATASET:
   task: 1
 
 HAR:
-  MOTION:
-    config: "config/train/motion-log.yaml"
-  DYNAMIC:
-    config: "config/train/dynamic-lstm.yaml"
-  STATIC:
-    config: "config/train/static-log.yaml"
+  motion: "config/train/motion.yaml"
+  dynamic: "config/train/dynamic.yaml"
+  static: "config/train/static.yaml"

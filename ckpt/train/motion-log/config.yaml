@@ -1,6 +1,5 @@
 DATASET:
   LIST:
-    test: test_motion_pdiot-data.odgt
     train: train_motion_pdiot-data.odgt
     val: val_motion_pdiot-data.odgt
   num_classes: 2

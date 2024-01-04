@@ -3,7 +3,5 @@ DATASET:
   task: 2
 
 HAR:
-  STATIC:
-    config: "config/train/static-log.yaml"
-  BREATH:
-    config: "config/train/resp-lstm.yaml"
+  static: "config/train/static.yaml"
+  breath: "config/train/breath.yaml"

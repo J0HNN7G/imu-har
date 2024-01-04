@@ -3,7 +3,7 @@
 import os
 import argparse
 
-from ml.config import cfg
+from ml.config.train import cfg
 
 # help
 import logging

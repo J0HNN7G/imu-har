@@ -3,7 +3,7 @@
 import os
 import argparse
 
-from ml.config import cfg
+from ml.config.train import cfg
 
 # misc
 import logging
@@ -11,7 +11,7 @@ from importlib import reload
 from tqdm import tqdm
 
 # main function
-from wandb.train.scripts.log_ckpt import main
+from log_ckpt import main
 
 
 if __name__ == '__main__':
