@@ -198,7 +198,7 @@ HAR:
 
 3. Run the LOO testing for a given `subject_id`. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
 ```
-python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpath> DATASET.student <subject_id>
+python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpath> DATASET.subject <subject_id>
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
