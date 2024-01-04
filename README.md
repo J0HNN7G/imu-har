@@ -8,6 +8,7 @@ IMU Activity Data: https://github.com/specknet/pdiot-data
 
 ![Diagram](docs/har_model.png)
 
+![Diagram](docs/task_models.png)
 
 #### TASK 1: CLASSIFICATION OF GENERAL HUMAN ACTIVITIES
 *Only use data collected during normal breathing!*
@@ -69,9 +70,6 @@ class 18: lying down on your back + other
 class 19: lying down on your stomach + other
 **other refers to singing/talking/laughing/eating
 ```
-
-![Diagram](docs/task_models.png)
-
 
 ##  Installation
 Using Python 3.10.13:
@@ -161,13 +159,13 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 └── log.txt                 # model training logs
 ```
 
-## Leave-One-Out (LOO) Testing
+## Leave-One-Out (LOO) Testing - TODO
 
 1. Format activity classification dataset for your test task. Example scripts found in `data`.
 
 Custom dataset files are expected to be formatted as follows:
 ```
-{ 'filepath': <data_csv_filepath>, 'annotation': <class>, 'labels': [<motion_label>, 
+{ 'filepath': <data_csv_filepath>, 'subject_id': <LOO_subject_id>, 'annotation': <class>, 'labels': [<motion_label>, 
                                                                      <dynamic_label>,
                                                                      <static_label>,
                                                                      <breath_label>]}
@@ -196,7 +194,7 @@ HAR:
 
 3. Run the testing
 ```
-python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpath>
+python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpath> -s <LOO_subject_id>
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
