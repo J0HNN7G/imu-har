@@ -1,0 +1,9 @@
+DATASET:
+  path: ""
+  task: 3
+
+HAR:
+  STATIC:
+    config: "config/train/static-log.yaml"
+  BREATH:
+    config: "config/train/breath-lstm.yaml"

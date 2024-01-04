@@ -82,7 +82,7 @@ conda activate <env_name>
 conda install tensorflow==2.11.0 
 
 # data processing
-conda install numpy pandas tqdm
+conda install numpy pandas scikit-learn tqdm
 
 # config, logging (not on conda)
 pip install yacs wandb --upgrade-strategy only-if-needed
@@ -172,7 +172,7 @@ Custom dataset files are expected to be formatted as follows:
                                                                      <breath_label>]}
 ...
 ```
-
+The number of labels will vary based on the model components required for the task ([Structure](#structure)).
 
 2. Make configuration YAML file. 
 

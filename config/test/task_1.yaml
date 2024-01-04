@@ -4,10 +4,8 @@ DATASET:
 
 HAR:
   MOTION:
-    config: "config/train/motion.yaml"
+    config: "config/train/motion-log.yaml"
   DYNAMIC:
-    config: "config/train/dynamic.yaml"
+    config: "config/train/dynamic-lstm.yaml"
   STATIC:
-    config: "config/train/static.yaml"
-  BREATH:
-    config: "config/train/breath.yaml"
+    config: "config/train/static-log.yaml"

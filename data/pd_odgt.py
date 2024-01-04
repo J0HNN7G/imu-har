@@ -9,12 +9,12 @@ from tqdm import tqdm
 
 # configuration for dataset split ratios and task names
 TRAIN_FRAC = 0.95
-TASK_NAMES = ['train', 'val', 'full']
+DATA_SPLIT = ['train', 'val', 'full']
 DATASET_NAME = 'pdiot-data'
 ODGT_FILE_FORMAT = f'{DATASET_NAME}.odgt'
-TASK_CATEGORIES = {
-    'train': ['motion', 'dynamic', 'static', 'breath'],
-    'test': ['task_1', 'task_2', 'task_3', 'all']
+TASK_NAMES = {
+    'train': ['motion', 'dynamic', 'static', 'breath', 'resp'],
+    'test': ['t1', 't2', 't3', 't4']
 }
 
 
@@ -99,24 +99,24 @@ def get_label(task, data_fp):
     elif task == 'breath':
         if activity in static_list:
             return breathing_dict[breathing]
-    elif task == 'all':
-        # 'all' task generates a unique label for all combinations
-        if activity in dynamic_list:
-            return (static_max_len * breathing_max_len) + dynamic_dict[activity]
-        elif activity in static_list:
-            static_index = static_dict[activity]
-            breath_index = breathing_dict[breathing]
-            return static_index + breath_index * static_max_len
-    elif task == 'task_1':
-        if activity in activity_list:
+    elif task == 't1':
+        if (activity in activity_list) and (breathing == breathing_list[0]):
             return activity_dict[activity]
-    elif task == 'task_2':
+    elif task == 't2':
         if (activity in static_list) and (breathing in breathing_list[:3]):
             static_index = static_dict[activity]
             breath_index = breathing_dict[breathing]
             return static_index + breath_index * static_max_len
-    elif task == 'task_3':
+    elif task == 't3':
         if activity in static_list:
+            static_index = static_dict[activity]
+            breath_index = breathing_dict[breathing]
+            return static_index + breath_index * static_max_len
+    elif task == 't4':
+        # 't4' task generates a unique label for all combinations
+        if activity in dynamic_list:
+            return (static_max_len * breathing_max_len) + dynamic_dict[activity]
+        elif activity in static_list:
             static_index = static_dict[activity]
             breath_index = breathing_dict[breathing]
             return static_index + breath_index * static_max_len
@@ -126,32 +126,45 @@ def get_label(task, data_fp):
     return -1
 
 
-def indices2odgt(odgt_fp, indices, data_fps, labels):
+def indices2odgt(odgt_fp, indices, data_fps, annotations, labels=None):
     """
     Write ODGT label files for dataset given indices, file paths, and labels.
     """
-    for idx in tqdm(indices): 
-        sample = {
-            'filepath': data_fps[idx],
-            'annotation': labels[idx]
-        }
+    if labels is None:
+        for idx in tqdm(indices): 
+            sample = {
+                'filepath': data_fps[idx],
+                'annotation': annotations[idx],
+            }
 
-        with open(odgt_fp, 'a') as f:
-            json.dump(sample, f)
-            f.write('\n')
+            with open(odgt_fp, 'a') as f:
+                json.dump(sample, f)
+                f.write('\n')
+    else:
+        for idx in tqdm(indices): 
+            sample = {
+                'filepath': data_fps[idx],
+                'annotation': annotations[idx],
+                'labels': labels[idx]
+            }
+
+            with open(odgt_fp, 'a') as f:
+                json.dump(sample, f)
+                f.write('\n')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="PDIoT Classification Dataset")
     parser.add_argument("-d", "--dir", required=True, help="Directory path to the dataset", type=str)
     parser.add_argument("-t", "--task", default='breath', help="Task for which to generate labels", type=str)
-    parser.add_argument("-s", "--split", action='store_false', help="Flag to not split into train and val sets")
+    parser.add_argument("-s", "--split", action='store_true', help="Flag to split into train and val sets")
+    parser.add_argument("-o", "--overwrite", action='store_true', help="Flag to overwrite existing files")
     args = parser.parse_args()
 
     # Validate input directory and task
     if not os.path.exists(args.dir):
         raise ValueError('Data directory not found')
-    if args.task not in TASK_CATEGORIES['train'] + TASK_CATEGORIES['test']:
+    if args.task not in TASK_NAMES['train'] + TASK_NAMES['test']:
         raise ValueError(f'Invalid task: {args.task}')
 
     # Prepare dataset file paths
@@ -160,13 +173,29 @@ if __name__ == '__main__':
     data_fps = glob.glob(f'{dataset_dir}/updated_anonymized_dataset_2023/*/*/*')
 
     # Filter and label data file paths
-    data_fps_valid, labels = [], []
+    data_fps_valid, annotations = [], []
+    if args.task in TASK_NAMES['train']:
+        labels = None
+    else:
+        labels = []
+
     for data_fp in data_fps:
         label = get_label(args.task, data_fp)
         if label != -1:
             data_fps_valid.append(data_fp)
-            labels.append(label)
-
+            annotations.append(label)
+            if args.task == 't1':
+                label = [get_label(task, data_fp) for task in ['motion', 'dynamic', 'static']]
+                labels.append(label)
+            elif args.task == 't2':
+                label = [get_label(task, data_fp) for task in ['static', 'resp']]
+                labels.append(label)
+            elif args.task == 't3':
+                label = [get_label(task, data_fp) for task in ['static', 'breath']]
+                labels.append(label)
+            elif args.task == 't4':
+                label = [get_label(task, data_fp) for task in ['motion', 'dynamic', 'static', 'breath']]
+                labels.append(label)
     # Perform dataset split if required
     if args.split:
         indices = np.random.permutation(len(data_fps_valid)).tolist()
@@ -177,21 +206,21 @@ if __name__ == '__main__':
         ]
 
         # Generate ODGT files for train and validation splits
-        for i, split in enumerate(TASK_NAMES[:2]):
+        for i, split in enumerate(DATA_SPLIT[:2]):
             odgt_fp = os.path.join(dataset_dir, f'{split}_{args.task}_{ODGT_FILE_FORMAT}')
-            if not os.path.exists(odgt_fp):
+            if (not os.path.exists(odgt_fp)) or args.overwrite:
                 open(odgt_fp, 'w').close()
-                indices2odgt(odgt_fp, split_indices[i], data_fps_valid, labels)
+                indices2odgt(odgt_fp, split_indices[i], data_fps_valid, annotations, labels)
                 print(f'{split.capitalize()} file saved at: {odgt_fp}')
-            else:
+            elif not args.overwrite:
                 print(f'{split.capitalize()} indexing already done!')
 
     # Generate a single ODGT file without splitting
     else:
-        odgt_fp = os.path.join(dataset_dir, f'{TASK_NAMES[2]}_{args.task}_{ODGT_FILE_FORMAT}')
-        if not os.path.exists(odgt_fp):
+        odgt_fp = os.path.join(dataset_dir, f'{DATA_SPLIT[2]}_{args.task}_{ODGT_FILE_FORMAT}')
+        if (not os.path.exists(odgt_fp)) or args.overwrite:
             open(odgt_fp, 'w').close()
-            indices2odgt(odgt_fp, range(len(data_fps_valid)), data_fps_valid, labels)
+            indices2odgt(odgt_fp, range(len(data_fps_valid)), data_fps_valid, annotations, labels)
             print(f'File saved at: {odgt_fp}')
-        else:
+        elif not args.overwrite:
             print('Indexing already done!')

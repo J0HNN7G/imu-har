@@ -22,6 +22,7 @@ setuptools.setup(
         'tensorflow',
         'numpy',
         'pandas',
+        'scikit-learn',
         'tqdm',
         'yacs',
         'wandb'
