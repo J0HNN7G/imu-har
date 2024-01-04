@@ -199,7 +199,7 @@ python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpat
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
 ```
 <DIR>
-├── confusion.csv           # LOO test confusion matrix 
+├── result.csv              # LOO predictions and actual labels
 ├── config.yaml             # configuration file (updated with test.py arguments)
 └── log.txt                 # LOO test logs
 ```
