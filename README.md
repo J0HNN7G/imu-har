@@ -72,9 +72,9 @@ class 19: lying down on your stomach + other
 ```
 
 ##  Installation
-Using Python 3.10.13:
 ```
-conda create -n <env_name>
+# python (change to desired version)
+conda create -n <env_name> python=3.10.13
 conda activate <env_name>
 
 # tensorflow (change to desired version)
