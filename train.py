@@ -8,7 +8,6 @@ import argparse
 # logging
 import logging
 import traceback
-from contextlib import redirect_stdout
 
 # ml
 import tensorflow as tf
