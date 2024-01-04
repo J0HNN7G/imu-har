@@ -103,7 +103,7 @@ Custom dataset files are expected to be formatted as follows:
 
 2. Make configuration YAML file. 
 
-Example `mlp-motion.yaml`:
+Example `motion-mlp.yaml`:
 ```
 DATASET:
   path: ""
@@ -165,10 +165,14 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 
 Custom dataset files are expected to be formatted as follows:
 ```
-{ 'filepath': <data_csv_filepath>, 'subject_id': <LOO_subject_id>, 'annotation': <class>, 'labels': [<motion_label>, 
-                                                                     <dynamic_label>,
-                                                                     <static_label>,
-                                                                     <breath_label>]}
+{ 'filepath': <data_csv_filepath>, 
+  'subject_id': <LOO_subject_id>, 
+  'annotation': <class>, 
+  'labels': [ <motion_label>, 
+              <dynamic_label>, 
+              <static_label> 
+              <breath_label> ]
+}
 ...
 ```
 The number of labels will vary based on the model components required for the task ([Structure](#structure)).
@@ -192,15 +196,15 @@ HAR:
     config: "config/train/breath.yaml"
 ```
 
-3. Run the testing
+3. Run the LOO testing for a given `subject_id`. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
 ```
-python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpath> -s <LOO_subject_id>
+python test.py -c <config_filepath> -i <test_odgt_dirpath> -o <checkpoint_dirpath> DATASET.student <subject_id>
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
 ```
 <DIR>
-├── confusion.txt           # LOO test confusion matrix 
+├── confusion.csv           # LOO test confusion matrix 
 ├── config.yaml             # configuration file (updated with test.py arguments)
 └── log.txt                 # LOO test logs
 ```
