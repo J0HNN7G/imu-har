@@ -186,14 +186,9 @@ DATASET:
   task: 1
 
 HAR:
-  MOTION:
-    config: "config/train/motion.yaml"
-  DYNAMIC:
-    config: "config/train/dynamic.yaml"
-  STATIC:
-    config: "config/train/static.yaml"
-  BREATH:
-    config: "config/train/breath.yaml"
+  motion: "config/train/motion.yaml"
+  dynamic: "config/train/dynamic.yaml"
+  static: "config/train/static.yaml"
 ```
 
 3. Run the LOO testing for a given `subject_id`. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
