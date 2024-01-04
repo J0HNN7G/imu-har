@@ -4,4 +4,4 @@ DATASET:
 
 HAR:
   static: "config/train/static.yaml"
-  breath: "config/train/breath.yaml"
+  breath: "config/train/resp.yaml"
