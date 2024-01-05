@@ -14,7 +14,7 @@ DATASET_NAME = 'pdiot-data'
 ODGT_FILE_FORMAT = f'{DATASET_NAME}.odgt'
 TASK_NAMES = {
     'train': ['motion', 'dynamic', 'static', 'breath', 'resp'],
-    'test': ['t1', 't2', 't3', 't4']
+    'test': ['t1', 't2', 't3', 't4', 'all']
 }
 
 
@@ -190,10 +190,10 @@ if __name__ == '__main__':
             elif args.task == 't2':
                 label = [get_label(task, data_fp) for task in ['static', 'resp']]
                 labels.append(label)
-            elif args.task == 't3':
+            elif (args.task == 't3') or (args.task == 't4'):
                 label = [get_label(task, data_fp) for task in ['static', 'breath']]
                 labels.append(label)
-            elif args.task == 't4':
+            elif args.task == 'all':
                 label = [get_label(task, data_fp) for task in ['motion', 'dynamic', 'static', 'breath']]
                 labels.append(label)
     # Perform dataset split if required
