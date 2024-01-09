@@ -109,15 +109,15 @@ DATASET:
   path: ""
   num_classes: 2
   LIST:
-    train: "train_motion_pdiot-data.odgt"
-    val: "val_motion_pdiot-data.odgt"
-    test: "test_motion_pdiot-data.odgt"
+    train: train_motion_pdiot-data.odgt
+    val: val_motion_pdiot-data.odgt
+    test: "test_motion_pdiot-data.odgt
 
 MODEL:
   INPUT:
-    sensor: "all"
+    sensor: all
     format: "summary"
-    window_size: 15
+    window_size: 50
   ARCH:
     LSTM:
       num_layers: 0
@@ -129,18 +129,18 @@ MODEL:
 TRAIN:
   path: ""
   DATA:
-    overlap_size: 5
+    overlap_size: 0
     batch_size: 128
   LEN:
     num_epoch: 100
     early_stop: 10
   OPTIM:
-    optim: "adam"
+    optim: adam
     lr: 0.001
     momentum: 0.9
     weight_decay: 0.0005
   LR:
-    schedule: 'step'
+    schedule: step
     step_size: 40
     gamma: 0.1
 ```
@@ -166,7 +166,7 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 Custom dataset files are expected to be formatted as follows:
 ```
 { 'filepath': <data_csv_filepath>, 
-  'subject_id': <LOO_subject_id>, 
+  'subject': <LOO_subject_id>, 
   'annotation': <class>, 
   'labels': [ <motion_label>, 
               <dynamic_label>, 
@@ -184,16 +184,19 @@ Example `task_1.yaml`:
 DATASET:
   path: ""
   task: 1
+  window_size: 50
+  overlap_size: 0
+  batch_size: 128
 
 HAR:
-  motion: "config/train/motion.yaml"
-  dynamic: "config/train/dynamic.yaml"
-  static: "config/train/static.yaml"
+  motion: "config/train/task_1/motion.yaml"
+  dynamic: "config/train/task_1/dynamic.yaml"
+  static: "config/train/task_1/static.yaml"
 ```
 
-3. Run the LOO testing for a given `subject_id`. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
+3. Run the LOO testing for a given `subject` ID. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
 ```
-python test.py -c <config_filepath> -s <subject_id> -i <test_odgt_dirpath> -o <checkpoint_dirpath>
+python test.py -c <config_filepath> -s <subject> -i <test_odgt_dirpath> -o <output_dirpath>
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:

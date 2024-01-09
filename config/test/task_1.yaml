@@ -1,8 +1,15 @@
 DATASET:
-  path: ""
   task: 1
 
-HAR:
-  motion: "config/train/task_1/motion.yaml"
-  dynamic: "config/train/task_1/dynamic.yaml"
-  static: "config/train/task_1/static.yaml"
+MODEL:
+  CONFIG:
+    motion: config/train/task_1/motion.yaml
+    dynamic: config/train/task_1/dynamic.yaml
+    static: config/train/task_1/static.yaml
+  INPUT:
+    window_size: 50
+
+TEST:
+  DATA:
+    overlap_size: 0
+    batch_size: 128

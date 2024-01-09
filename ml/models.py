@@ -30,28 +30,6 @@ class InputTransformBuilder:
     """
 
     @staticmethod
-    def input_shape(args):
-        """
-        Calculate the input shape based on the configuration.
-
-        Args:
-        - args: input configuration
-
-        Returns:
-        - input shape (tuple)
-        """
-        num_sensors = 6  # Number of sensors is always 6
-
-        if args.format == 'window':
-            return (1, window_size, num_sensors)
-        else:
-            # For 'normal' and 'summary' formats
-            return (None, window_size, num_sensors)
-
-        return None  # Default case, though it should be handled in build_transform
-
-
-    @staticmethod
     def build_transform(args, is_rnn=False):
         """
         Build a transform for the input.

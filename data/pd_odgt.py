@@ -70,14 +70,12 @@ def parse_metadata(data_fp):
     parts = data_fp.split('/')[-1].split('_')
     return parts[0], parts[1], parts[2], parts[3].replace('.csv','')
 
+def get_subject(data_fp):
+    return parse_metadata(data_fp)[0]
 
 def get_label(task, data_fp):
     user, device, activity, breathing = parse_metadata(data_fp)
 
-    # Exclude certain users or devices
-    if (device != 'respeck'):
-        return -1
-    
     # Check if activity is valid
     if activity not in dynamic_list and activity not in static_list:
         raise ValueError(f'Invalid activity: {activity}')
@@ -126,7 +124,7 @@ def get_label(task, data_fp):
     return -1
 
 
-def indices2odgt(odgt_fp, indices, data_fps, annotations, labels=None):
+def indices2odgt(odgt_fp, indices, data_fps, annotations, subjects=None, labels=None):
     """
     Write ODGT label files for dataset given indices, file paths, and labels.
     """
@@ -144,6 +142,7 @@ def indices2odgt(odgt_fp, indices, data_fps, annotations, labels=None):
         for idx in tqdm(indices): 
             sample = {
                 'filepath': data_fps[idx],
+                'subject': subjects[idx],
                 'annotation': annotations[idx],
                 'labels': labels[idx]
             }
@@ -170,20 +169,32 @@ if __name__ == '__main__':
     # Prepare dataset file paths
     print('Starting ODGT file creation')
     dataset_dir = os.path.join(args.dir, DATASET_NAME)
-    data_fps = glob.glob(f'{dataset_dir}/updated_anonymized_dataset_2023/*/*/*')
+    data_fps = glob.glob(f'{dataset_dir}/updated_anonymized_dataset_2023/Respeck/*/*')
+
+    # get subject ids
+    all_subjects = set([get_subject(data_fp) for data_fp in data_fps])
+    subject_ordering = sorted(all_subjects, key=lambda x: int(x[1:]))
+    subject_lookup = {subject: i for i, subject in enumerate(subject_ordering)}
 
     # Filter and label data file paths
     data_fps_valid, annotations = [], []
     if args.task in TASK_NAMES['train']:
         labels = None
+        subjects = None
     else:
         labels = []
+        subjects = []
 
     for data_fp in data_fps:
-        label = get_label(args.task, data_fp)
-        if label != -1:
+        annotation = get_label(args.task, data_fp)
+        if annotation != -1:
             data_fps_valid.append(data_fp)
-            annotations.append(label)
+            annotations.append(annotation)
+
+            if args.task in TASK_NAMES['test']:
+                subject_id = subject_lookup[get_subject(data_fp)]
+                subjects.append(subject_id)
+
             if args.task == 't1':
                 label = [get_label(task, data_fp) for task in ['motion', 'dynamic', 'static']]
                 labels.append(label)
@@ -196,6 +207,7 @@ if __name__ == '__main__':
             elif args.task == 'all':
                 label = [get_label(task, data_fp) for task in ['motion', 'dynamic', 'static', 'breath']]
                 labels.append(label)
+
     # Perform dataset split if required
     if args.split:
         indices = np.random.permutation(len(data_fps_valid)).tolist()
@@ -210,7 +222,7 @@ if __name__ == '__main__':
             odgt_fp = os.path.join(dataset_dir, f'{split}_{args.task}_{ODGT_FILE_FORMAT}')
             if (not os.path.exists(odgt_fp)) or args.overwrite:
                 open(odgt_fp, 'w').close()
-                indices2odgt(odgt_fp, split_indices[i], data_fps_valid, annotations, labels)
+                indices2odgt(odgt_fp, split_indices[i], data_fps_valid, annotations, subjects, labels)
                 print(f'{split.capitalize()} file saved at: {odgt_fp}')
             elif not args.overwrite:
                 print(f'{split.capitalize()} indexing already done!')
@@ -220,7 +232,7 @@ if __name__ == '__main__':
         odgt_fp = os.path.join(dataset_dir, f'{DATA_SPLIT[2]}_{args.task}_{ODGT_FILE_FORMAT}')
         if (not os.path.exists(odgt_fp)) or args.overwrite:
             open(odgt_fp, 'w').close()
-            indices2odgt(odgt_fp, range(len(data_fps_valid)), data_fps_valid, annotations, labels)
+            indices2odgt(odgt_fp, list(range(len(data_fps_valid))), data_fps_valid, annotations, subjects, labels)
             print(f'File saved at: {odgt_fp}')
         elif not args.overwrite:
             print('Indexing already done!')

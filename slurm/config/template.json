@@ -19,7 +19,7 @@
     "DATA_DN": "data/sets",
     "CKPT_DN": "ckpt",
     "SLURM_DN": "slurm",
-    "TRAIN_FN": "train.py",
+    "TRAIN_FN": train.py",
     "EXP": {
         "CSV": {
             "DEFAULT_FN" : "EXP.csv",

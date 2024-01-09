@@ -1,21 +1,21 @@
 DATASET:
-  num_classes: 5
+  num_classes: 3
   LIST:
-    train: train_static_pdiot-data.odgt
-    val: val_static_pdiot-data.odgt
+    train: train_resp_pdiot-data.odgt
+    val: val_resp_pdiot-data.odgt
 
 MODEL:
   ARCH:
     LSTM:
-      hidden_size: 0
-      num_layers: 0
+      hidden_size: 128
+      num_layers: 1
     MLP:
       dropout: 1.0
       hidden_size: 0
       num_layers: 0
   INPUT:
-    format: summary
-    sensor: accel
+    format: window
+    sensor: all
     window_size: 50
 
 TRAIN:
@@ -23,11 +23,11 @@ TRAIN:
     overlap_size: 0
     batch_size: 128
   LEN:
-    num_epoch: 5
-    early_stop: 5
+    num_epoch: 100
+    early_stop: 10
   OPTIM:
     optim: adam
-    lr: 0.01
+    lr: 0.001
     momentum: 0.9
     weight_decay: 0.0005
   LR:

@@ -28,7 +28,7 @@ def get_sliding_windows(data, window_size, overlap_size):
     return windows
 
 
-def odgt2data(odgt_fp, window_size, overlap_size, num_classes):
+def odgt2train(odgt_fp, window_size, overlap_size):
     odgt = [json.loads(x.rstrip()) for x in open(odgt_fp, 'r')]
     
     X = []
@@ -48,5 +48,24 @@ def odgt2data(odgt_fp, window_size, overlap_size, num_classes):
     #y_onehot = np.zeros((len(y), num_classes))
     #y_onehot[np.arange(len(y)), y] = 1
     #y = np.array(y_onehot)
+
+    return X, y
+
+
+def odgt2test(odgt_fp, window_size, overlap_size):
+    odgt = [json.loads(x.rstrip()) for x in open(odgt_fp, 'r')]
+    
+    X = []
+    y = []
+    for recording in odgt:
+        df = pd.read_csv(recording['filepath'])
+        df = drop_unwanted_columns(df)
+        samples = get_sliding_windows(df.to_numpy(), window_size, overlap_size)
+        for sample in samples:
+            X.append(sample)
+            y.append(recording['annotation'])
+
+    X = np.array(X)
+    y = np.array(y)
 
     return X, y

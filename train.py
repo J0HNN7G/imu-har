@@ -15,7 +15,7 @@ import tensorflow as tf
 # training
 from ml.config.train import cfg
 from ml.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder, TimingCallback
-from ml.dataset import odgt2data
+from ml.dataset import odgt2train
 
 
 def main(cfg):
@@ -33,12 +33,10 @@ def main(cfg):
     train_odgt_fp = os.path.join(cfg.DATASET.path, cfg.DATASET.LIST.train)
     val_odgt_fp = os.path.join(cfg.DATASET.path, cfg.DATASET.LIST.val)
 
-    train_X, train_y = odgt2data(train_odgt_fp, cfg.MODEL.INPUT.window_size, 
-                                                cfg.TRAIN.DATA.overlap_size, 
-                                                cfg.DATASET.num_classes)
-    val_X, val_y = odgt2data(val_odgt_fp, cfg.MODEL.INPUT.window_size, 
-                                          cfg.TRAIN.DATA.overlap_size,
-                                          cfg.DATASET.num_classes)
+    train_X, train_y = odgt2train(train_odgt_fp, cfg.MODEL.INPUT.window_size, 
+                                                cfg.TRAIN.DATA.overlap_size)
+    val_X, val_y = odgt2train(val_odgt_fp, cfg.MODEL.INPUT.window_size, 
+                                          cfg.TRAIN.DATA.overlap_size)
 
         
     model = ModelBuilder.build_classifier(cfg.MODEL, '', cfg.DATASET.num_classes)

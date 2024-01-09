@@ -14,18 +14,36 @@ cfg.DATASET = CN()
 cfg.DATASET.path = ""
 # task number
 cfg.DATASET.task = 1
-# subject id
-cfg.DATASET.subject = -1
 
 # -----------------------------------------------------------------------------
 # HAR model
 # -----------------------------------------------------------------------------
-cfg.HAR = CN()
+cfg.MODEL = CN()
+cfg.MODEL.CONFIG = CN()
 # motion classifier configuration file
-cfg.HAR.motion = ""
+cfg.MODEL.CONFIG.motion = ""
 # dynamic classifier configuration file
-cfg.HAR.dynamic = ""
+cfg.MODEL.CONFIG.dynamic = ""
 # static classifier configuration file
-cfg.HAR.static = ""
+cfg.MODEL.CONFIG.static = ""
 # breathing classifier configuration file
-cfg.HAR.breathing = ""
+cfg.MODEL.CONFIG.breath = ""
+
+cfg.MODEL.INPUT = CN()
+# window size
+cfg.MODEL.INPUT.window_size = 50
+
+# -----------------------------------------------------------------------------
+# Testing
+# -----------------------------------------------------------------------------
+cfg.TEST = CN()
+# path to checkpoint
+cfg.TEST.path = ""
+# subject id
+cfg.TEST.subject = -1
+
+cfg.TEST.DATA = CN()
+# overlap size
+cfg.TEST.DATA.overlap_size = 0
+# batch size
+cfg.TEST.DATA.batch_size = 128
