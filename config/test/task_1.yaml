@@ -3,6 +3,6 @@ DATASET:
   task: 1
 
 HAR:
-  motion: "config/train/motion.yaml"
-  dynamic: "config/train/dynamic.yaml"
-  static: "config/train/static.yaml"
+  motion: "config/train/task_1/motion.yaml"
+  dynamic: "config/train/task_1/dynamic.yaml"
+  static: "config/train/task_1/static.yaml"

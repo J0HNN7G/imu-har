@@ -1,7 +1,0 @@
-DATASET:
-  path: ""
-  task: 4
-
-HAR:
-  static: "config/train/static-log.yaml"
-  breath: "config/train/breath-lstm.yaml"

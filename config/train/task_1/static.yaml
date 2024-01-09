@@ -1,24 +1,23 @@
 DATASET:
   path: ""
-  num_classes: 3
+  num_classes: 5
   LIST:
-    train: "train_resp_pdiot-data.odgt"
-    val: "val_resp_pdiot-data.odgt"
+    train: "train_static_pdiot-data.odgt"
+    val: "val_static_pdiot-data.odgt"
 
 MODEL:
-  INPUT:
-    sensor: "all"
-    format: "window"
-    window_size: 15
   ARCH:
     LSTM:
-      num_layers: 1
-      hidden_size: 16
+      hidden_size: 0
+      num_layers: 0
     MLP:
-      num_layers: 3
-      hidden_size: 32
-      dropout: 0.2
-
+      dropout: 1.0
+      hidden_size: 0
+      num_layers: 0
+  INPUT:
+    format: summary
+    sensor: all
+    window_size: 15
 
 TRAIN:
   path: ""
