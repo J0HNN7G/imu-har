@@ -1,8 +1,5 @@
 DATASET:
   num_classes: 5
-  LIST:
-    train: train_static_pdiot-data.odgt
-    val: val_static_pdiot-data.odgt
 
 MODEL:
   ARCH:
@@ -16,21 +13,12 @@ MODEL:
   INPUT:
     format: summary
     sensor: accel
-    window_size: 50
 
 TRAIN:
-  DATA:
-    overlap_size: 0
-    batch_size: 128
   LEN:
     num_epoch: 5
-    early_stop: 5
   OPTIM:
     optim: adam
     lr: 0.01
     momentum: 0.9
     weight_decay: 0.0005
-  LR:
-    schedule: step
-    step_size: 40
-    gamma: 0.1

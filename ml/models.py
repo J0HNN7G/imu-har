@@ -10,6 +10,15 @@ from timeit import default_timer as timer
 # number of sensors
 NUM_SENSORS = 6
 
+# task details
+TASK_MODEL_DICT = {
+    1: ['motion', 'dynamic', 'static'],
+    2: ['static', 'resp'],
+    3: ['static', 'breath'],
+    4: ['static', 'breath']
+}
+STATIC_MAX_LEN = 5
+
 
 class TimingCallback(tf.keras.callbacks.Callback):
     """
@@ -129,6 +138,74 @@ class ModelBuilder:
             classifier.load_weights(weights)
 
         return classifier
+
+    @staticmethod
+    def build_hierarchical_classifier(task, component_dict):
+        """
+        Build a non-trainable hierarchical classifier model.
+
+        Args:
+        - args: Model architecture and other arguments.
+        - component_dict (dict): A dictionary of component models.
+
+        Returns:
+        - classifier: A classifier model (not trainable).
+        """
+        if set(component_dict.keys()) != set(TASK_MODEL_DICT[task]):
+            raise Exception(f'Invalid component dictionary {component_dict.keys()} for task {task}')
+
+        if task == 1:
+            def classify(x):
+                motion_output = component_dict['motion'](x)
+                motion_pred = tf.math.argmax(motion_output, axis=1)
+
+                dynamic_indices = tf.where(motion_pred == 1)[:, 0]
+                static_indices = tf.where(motion_pred == 0)[:, 0]
+
+                dynamic_output = component_dict['dynamic'](tf.gather(x, dynamic_indices))
+                dynamic_pred =  STATIC_MAX_LEN + tf.math.argmax(dynamic_output, axis=1)
+
+                static_output = component_dict['static'](tf.gather(x, static_indices))
+                static_pred = tf.math.argmax(static_output, axis=1)
+
+                batch_size = tf.shape(x)[0]
+                pred = tf.fill((batch_size,), -1.0)
+                pred = tf.cast(pred, tf.int64)
+
+                pred = tf.tensor_scatter_nd_update(pred, tf.expand_dims(dynamic_indices, axis=1), dynamic_pred)
+                pred = tf.tensor_scatter_nd_update(pred, tf.expand_dims(static_indices, axis=1), static_pred)
+
+                return pred
+            
+        elif task == 2:
+            def classify(x):
+                static_pred = component_dict['static'](x)
+                static_pred = tf.math.argmax(static_pred, axis=1)
+
+                resp_pred = component_dict['resp'](x)
+                resp_pred = tf.math.argmax(resp_pred, axis=1)
+
+                pred = static_pred + resp_pred * STATIC_MAX_LEN
+
+                return pred
+
+        elif (task == 3) or (task == 4):
+            def classify(x):
+                static_pred = component_dict['static'](x)
+                static_pred = tf.math.argmax(static_pred, axis=1)
+
+                breath_pred = component_dict['breath'](x)
+                breath_pred = tf.math.argmax(breath_pred, axis=1)
+
+                pred = static_pred + breath_pred * STATIC_MAX_LEN
+
+                return pred
+            
+        else:
+            raise Exception(f'Model undefined for task: {task}')
+        
+        return classify
+    
 
 
 class OptimizerBuilder:
