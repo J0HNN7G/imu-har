@@ -2,8 +2,8 @@ import os
 import glob
 import tensorflow as tf
 
-from ml.config.train import cfg
-from ml.models import ModelBuilder
+from har.config.train import cfg
+from har.models import ModelBuilder
 
 def main():
     data = glob.glob('*')

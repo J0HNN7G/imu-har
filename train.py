@@ -13,9 +13,9 @@ import traceback
 import tensorflow as tf
 
 # training
-from ml.config.train import cfg
-from ml.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder, TimingCallback
-from ml.dataset import odgt2train
+from har.config.train import cfg
+from har.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder, TimingCallback
+from har.dataset import odgt2train
 
 
 def main(cfg):

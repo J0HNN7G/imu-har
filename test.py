@@ -15,10 +15,10 @@ import tensorflow as tf
 from sklearn.metrics import classification_report
 
 # training
-from ml.config.train import default_cfg
-from ml.config.test import cfg as cfg_test
-from ml.models import TASK_MODEL_DICT, ModelBuilder, OptimizerBuilder, LRScheduleBuilder, BestModelCallback
-from ml.dataset import odgt2test
+from har.config.train import default_cfg
+from har.config.test import cfg as cfg_test
+from har.models import TASK_MODEL_DICT, ModelBuilder, OptimizerBuilder, LRScheduleBuilder, BestModelCallback
+from har.dataset import odgt2test
 
 # task odgt filename format
 DATA_ODGT_FORMAT = 'full_t{}_pdiot-data.odgt'
