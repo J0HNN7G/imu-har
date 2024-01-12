@@ -12,13 +12,10 @@ ckpt/*
 !ckpt/train/
 !ckpt/test/
 # slurm
-slurm/config/*
+slurm/*
 !slurm/config/template.json
-slurm/train/*
-!slurm/train/templates/
+!slurm/templates/
 !slurm/train/scripts/
-slurm/test/*
-!slurm/test/templates/
 !slurm/test/scripts/
 # wandb
 wandb/keys/*

@@ -108,12 +108,12 @@ def get_label(task, data_fp):
             static_index = static_dict[activity]
             breath_index = breathing_dict[breathing]
             return static_index + breath_index * static_max_len
-    elif task == 't3':
+    elif task == 't3' or task == 't4':
         if activity in static_list:
             static_index = static_dict[activity]
             breath_index = breathing_dict[breathing]
             return static_index + breath_index * static_max_len
-    elif task == 't4':
+    elif task == 'all':
         # 't4' task generates a unique label for all combinations
         if activity in dynamic_list:
             return (static_max_len * breathing_max_len) + dynamic_dict[activity]

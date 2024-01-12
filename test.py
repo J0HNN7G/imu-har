@@ -172,7 +172,10 @@ if __name__ == '__main__':
     cfg_test.MODEL.path = train_cfg_fp
 
     # input args
-    cfg_test.DATASET.odgt = DATA_ODGT_FORMAT.format(args.task)
+    if args.task in [1, 2, 3]:
+        cfg_test.DATASET.odgt = DATA_ODGT_FORMAT.format(args.task)
+    elif args.task == 4:
+        cfg_test.DATASET.odgt = DATA_ODGT_FORMAT.format(3)
     cfg_test.DATASET.path = args.input
     cfg_test.TEST.subject = args.subject
     cfg_test.TEST.path = args.output
