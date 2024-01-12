@@ -10,5 +10,4 @@ TRAIN:
   LEN:
     num_epoch: 2
   OPTIM:
-    optim: adam
     lr: 0.01

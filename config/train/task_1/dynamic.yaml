@@ -16,10 +16,3 @@ MODEL:
   INPUT:
     format: window
     sensor: accel
-
-TRAIN:
-  LEN:
-    num_epoch: 10
-  OPTIM:
-    optim: adam
-    lr: 0.001

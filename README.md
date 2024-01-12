@@ -103,46 +103,29 @@ Custom dataset files are expected to be formatted as follows:
 
 2. Make configuration YAML file. 
 
-Example `motion-mlp.yaml`:
+Example `dynamic.yaml`:
 ```
 DATASET:
-  path: ""
-  num_classes: 2
+  num_classes: 6
   LIST:
-    train: train_motion_pdiot-data.odgt
-    val: val_motion_pdiot-data.odgt
-    test: "test_motion_pdiot-data.odgt
+    train: train_dynamic_pdiot-data.odgt
+    val: val_dynamic_pdiot-data.odgt
 
 MODEL:
-  INPUT:
-    sensor: all
-    format: "summary"
-    window_size: 50
   ARCH:
-    LSTM:
-      num_layers: 0
-    MLP:
-      num_layers: 3
+    CNN:
+      kernel_size: 7
+      pool_size: 2
+      dropout: 0.0
       hidden_size: 32
-      dropout: 0.2
-
-TRAIN:
-  path: ""
-  DATA:
-    overlap_size: 0
-    batch_size: 128
-  LEN:
-    num_epoch: 100
-    early_stop: 10
-  OPTIM:
-    optim: adam
-    lr: 0.001
-    momentum: 0.9
-    weight_decay: 0.0005
-  LR:
-    schedule: step
-    step_size: 40
-    gamma: 0.1
+      num_layers: 2
+    MLP:
+      dropout: 0.5
+      hidden_size: 100
+      num_layers: 1
+  INPUT:
+    format: window
+    sensor: accel
 ```
 
 3. Run the training
@@ -166,7 +149,7 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 Custom dataset files are expected to be formatted as follows:
 ```
 { 'filepath': <data_csv_filepath>, 
-  'subject': <LOO_subject_id>, 
+  'subject': <subject_id>, 
   'annotation': <class>, 
   'labels': [ <motion_label>, 
               <dynamic_label>, 

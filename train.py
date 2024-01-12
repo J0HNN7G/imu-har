@@ -20,7 +20,7 @@ from ml.dataset import odgt2train
 
 def main(cfg):
     """
-    Main function for training a pedestrian detection model.
+    Main function for training a HAR component training.
 
     Parameters:
     - cfg (object): A configuration object containing training parameters.
@@ -81,7 +81,7 @@ def main(cfg):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description="PyTorch Pedestrian Detection Finetuning"
+        description="TensorFlow HAR Component Training"
     )
     parser.add_argument(
         "-c", "--config",
