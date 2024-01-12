@@ -8,7 +8,7 @@ config/*
 data/sets/*
 # checkpoints
 ckpt/*
-!ckpt/train/
+!ckpt/android/
 !ckpt/test/
 # slurm
 slurm/config/*
