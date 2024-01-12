@@ -21,6 +21,8 @@ cfg.DATASET.task = 1
 # HAR model
 # -----------------------------------------------------------------------------
 cfg.MODEL = CN()
+# path to train configuration files
+cfg.MODEL.path = ""
 cfg.MODEL.CONFIG = CN()
 # motion classifier configuration file
 cfg.MODEL.CONFIG.motion = ""

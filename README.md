@@ -173,21 +173,25 @@ The number of labels will vary based on the model components required for the ta
 Example `task_1.yaml`:
 ```
 DATASET:
-  path: ""
   task: 1
-  window_size: 50
-  overlap_size: 0
-  batch_size: 128
 
-HAR:
-  motion: "config/train/task_1/motion.yaml"
-  dynamic: "config/train/task_1/dynamic.yaml"
-  static: "config/train/task_1/static.yaml"
+MODEL:
+  CONFIG:
+    motion: config/train/task_1/motion.yaml
+    dynamic: config/train/task_1/dynamic.yaml
+    static: config/train/task_1/static.yaml
+  INPUT:
+    window_size: 50
+
+TEST:
+  DATA:
+    overlap_size: 40
+    batch_size: 128
 ```
 
-3. Run the LOO testing for a given `subject` ID. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
+3. Run the LOO testing for a given `subject`. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
 ```
-python test.py -c <config_filepath> -s <subject> -i <test_odgt_dirpath> -o <output_dirpath>
+python test.py -c <config_dirpath> -s <subject> -i <test_odgt_dirpath> -o <output_dirpath>
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:

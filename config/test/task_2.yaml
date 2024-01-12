@@ -3,8 +3,8 @@ DATASET:
 
 MODEL:
   CONFIG:
-    static: config/train/task_2/static.yaml
-    resp: config/train/task_2/resp.yaml
+    static: static.yaml
+    resp: resp.yaml
   INPUT:
     window_size: 50
 

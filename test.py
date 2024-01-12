@@ -6,6 +6,7 @@ import sys
 import argparse
 
 # logging
+import csv
 import logging
 import traceback
 
@@ -20,8 +21,9 @@ from ml.config.test import cfg as cfg_test
 from ml.models import TASK_MODEL_DICT, ModelBuilder, OptimizerBuilder, LRScheduleBuilder, BestModelCallback
 from ml.dataset import odgt2test
 
-ODGT_FN = 'full_t{}_pdiot-data.odgt'
-
+# config dir task format
+TASK_CFG_DIR = 'task_{}'
+CFG_EXT = '.yaml'
 
 def main(cfg_test):
     """
@@ -56,8 +58,8 @@ def main(cfg_test):
         val_X = test_dict['val']['X'][valid_idx]
         val_y = test_dict['val'][component][valid_idx]
 
-        project_dp = os.path.join(cfg_test.DATASET , component)
-        component_cfg_fp = os.path.join(project_dp, cfg_test.MODEL.CONFIG[component])
+        model_dp = os.path.join(cfg_test.MODEL.path, component)
+        component_cfg_fp = os.path.join(model_dp, cfg_test.MODEL.CONFIG[component])
         cfg_train = default_cfg()
         cfg_train.merge_from_file(component_cfg_fp)
 
@@ -85,8 +87,16 @@ def main(cfg_test):
     model = ModelBuilder.build_hierarchical_classifier(cfg_test.DATASET.task, model_dict)
 
     pred = model(test_dict['val']['X'])
+    actual = test_dict['val']['y']
 
-    report = classification_report(test_dict['val']['y'], pred)
+    # Write pred and true annotation to CSV file
+    result_fp = os.path.join(cfg_test.TEST.path, cfg_test.TEST.FN.result)
+    with open(result_fp, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['pred', 'true'])
+        writer.writerows(zip(pred, actual)) 
+
+    report = classification_report(actual, pred)
 
     print(f'Task {cfg_test.DATASET.task} - Subject {cfg_test.TEST.subject}') 
     print(report)
@@ -142,11 +152,26 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # get config file and check directory set up is correct
-    args.config
-
-
-    cfg_test.merge_from_file(args.config)
+    if not os.path.isdir(args.config):
+        raise ValueError('Config directory does not exist!')
+    
+    test_cfg_fp = os.path.join(args.config, 'test', TASK_CFG_DIR.format(args.task) + CFG_EXT)
+    if not os.path.isfile(args.config):
+        raise ValueError('Test config file does not exist!')
+    cfg_test.merge_from_file(test_cfg_fp)
     cfg_test.merge_from_list(args.opts)
+
+    if not cfg_test.DATASET.task != args.task:
+        raise ValueError('Task number in config does not match task number in args!')
+
+    train_cfg_fp = os.path.join(args.config, 'train', TASK_CFG_DIR.format(args.task))
+    for component in TASK_MODEL_DICT[cfg_test.DATASET.task]:
+        cfg_fp = os.path.join(train_cfg_fp, cfg_test.MODEL.CONFIG[component])
+        if not os.path.isfile(cfg_fp):
+            raise ValueError(f'Train config file for component {component} does not exist!')
+    cfg_test.MODEL.path = train_cfg_fp
+
+    # input args
     cfg_test.DATASET.subject = args.subject
     cfg_test.DATASET.path = args.input
     cfg_test.TEST.path = args.output

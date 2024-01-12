@@ -3,8 +3,8 @@ DATASET:
 
 MODEL:
   CONFIG:
-    static: config/train/task_3/static.yaml
-    breath: config/train/task_3/breath.yaml
+    static: static.yaml
+    breath: breath.yaml
   INPUT:
     window_size: 50
 

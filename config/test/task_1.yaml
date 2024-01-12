@@ -3,9 +3,9 @@ DATASET:
 
 MODEL:
   CONFIG:
-    motion: config/train/task_1/motion.yaml
-    dynamic: config/train/task_1/dynamic.yaml
-    static: config/train/task_1/static.yaml
+    motion: motion.yaml
+    dynamic: dynamic.yaml
+    static: static.yaml
   INPUT:
     window_size: 50
 
