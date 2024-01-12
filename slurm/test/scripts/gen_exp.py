@@ -91,6 +91,7 @@ if __name__ == '__main__':
         dn = EXP_DN_FORMAT.format(task, subject)
         expt_call = f"{base_call}/{dn} {param_call_str}"
         
+
         with open(main_exp_path, 'a') as f:
-            line = SEP.join([str(x) for x in params] + [dn, expt_call]) + '\n'
+            line = SEP.join([str(x) for x in params] + [os.path.join('test',dn), expt_call]) + '\n'
             f.write(line)
