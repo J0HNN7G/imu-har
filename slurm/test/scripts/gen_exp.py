@@ -65,14 +65,14 @@ if __name__ == '__main__':
         raise ValueError('Unsupported choice!')
 
     main_project_path = os.path.join(MAIN_HOME, MAIN_USER, MAIN_PROJECT)
-    train_path = os.path.join(main_project_path, cfg['TRAIN_FN'])
+    test_path = os.path.join(main_project_path, cfg['TEST_FN'])
     config_path = os.path.join(main_project_path, cfg['CONFIG_DN'])
     
     node_project_path = os.path.join(NODE_HOME, NODE_USER, NODE_PROJECT)
     data_path = os.path.join(node_project_path, cfg['DATA_DN'], cfg['DATASET'])
     ckpt_path = os.path.join(node_project_path, cfg['CKPT_DN'], 'test')
 
-    base_call = f"python {train_path} -c {config_path} -i {data_path} -o {ckpt_path}"
+    base_call = f"python {test_path} -c {config_path} -i {data_path} -o {ckpt_path}"
 
     nr_expts = len(TASKS) * NO_SUBJECTS
     print(f'Total experiments = {nr_expts}')
