@@ -12,8 +12,8 @@ cfg = CN()
 cfg.DATASET = CN()
 # path to the root of the dataset directory
 cfg.DATASET.path = ""
-# test odgt filename format
-cfg.DATASET.odgt = 'full_t{}_pdiot-data.odgt'
+# task odgt filename
+cfg.DATASET.odgt = ""
 # task number
 cfg.DATASET.task = 1
 

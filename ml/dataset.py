@@ -88,7 +88,7 @@ def odgt2test(odgt_fp, task, subject_id, window_size, overlap_size):
         df = drop_unwanted_columns(df)
         samples = get_sliding_windows(df.to_numpy(), window_size, overlap_size)
 
-        data_set = 'train' if recording['subject'] != subject_id else 'val'
+        data_set = 'train' if (recording['subject'] != subject_id) else 'val'
         for sample in samples:
             test_dict[data_set]['X'].append(sample)
             test_dict[data_set]['y'].append(recording['annotation'])

@@ -86,7 +86,7 @@ if __name__ == '__main__':
     parser.add_argument(
         "-c", "--config",
         required=True,
-        metavar="FILENAME",
+        metavar="PATH",
         help="absolute path to config file",
         type=str,
     )

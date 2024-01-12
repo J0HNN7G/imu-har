@@ -150,7 +150,7 @@ python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_
 └── log.txt                 # model training logs
 ```
 
-## Leave-One-Out (LOO) Testing - TODO
+## Leave-One-Out (LOO) Testing
 
 1. Format activity classification dataset for your test task. Example scripts found in `data`.
 
@@ -191,7 +191,7 @@ TEST:
 
 3. Run the LOO testing for a given `subject`. This means we train the HAR model on the data from all the other subjects, and evaluate on the data from the specified subject.
 ```
-python test.py -c <config_dirpath> -s <subject> -i <test_odgt_dirpath> -o <output_dirpath>
+python test.py -c <config_dirpath> -i <test_odgt_dirpath> -o <output_dirpath> -t <task> -s <subject> 
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
