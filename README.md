@@ -8,6 +8,14 @@ IMU Activity Data: https://github.com/specknet/pdiot-data
 
 ![Diagram](docs/har_model.png)
 
+**SR - Softmax Regression**
+
+**MLP - Multilayer Perceptron**
+
+**CNN - Convolutional Neural Network**
+
+**LSTM - Long Short-Term Memory**
+
 ![Diagram](docs/task_models.png)
 
 #### TASK 1: CLASSIFICATION OF GENERAL HUMAN ACTIVITIES
