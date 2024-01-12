@@ -97,6 +97,9 @@ def get_label(task, data_fp):
     elif task == 'breath':
         if activity in static_list:
             return breathing_dict[breathing]
+    elif task == 'resp':
+        if (activity in static_list) and (breathing in breathing_list[:3]):
+            return breathing_dict[breathing]
     elif task == 't1':
         if (activity in activity_list) and (breathing == breathing_list[0]):
             return activity_dict[activity]
@@ -207,15 +210,31 @@ if __name__ == '__main__':
             elif args.task == 'all':
                 label = [get_label(task, data_fp) for task in ['motion', 'dynamic', 'static', 'breath']]
                 labels.append(label)
-
-    # Perform dataset split if required
+    
+    
     if args.split:
-        indices = np.random.permutation(len(data_fps_valid)).tolist()
-        limit = int(len(data_fps_valid) * TRAIN_FRAC)
-        split_indices = [
-            indices[:limit],
-            indices[limit:],
-        ]
+        # Store indices by class
+        indices = np.random.permutation(range(len(data_fps_valid))).tolist()
+        class_indices = {}
+        for i in indices:
+            annotation = annotations[i]
+            if annotation not in class_indices:
+                class_indices[annotation] = []
+            class_indices[annotation].append(i)
+
+        # Construct split_indices by adding proportional to the number of each class in the overall dataset
+        split_indices = [[], []]  # Train and validation splits
+        for class_label, indices in class_indices.items():
+            num_samples = len(indices)
+            limit = int(num_samples * TRAIN_FRAC)
+            train_indices = indices[:limit]
+            val_indices = indices[limit:]
+
+            split_indices[0].extend(train_indices)
+            split_indices[1].extend(val_indices)
+
+            np.random.shuffle(split_indices[0])
+            np.random.shuffle(split_indices[1])
 
         # Generate ODGT files for train and validation splits
         for i, split in enumerate(DATA_SPLIT[:2]):

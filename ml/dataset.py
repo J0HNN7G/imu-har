@@ -64,21 +64,22 @@ def odgt2test(odgt_fp, task, subject_id, window_size, overlap_size):
         }
     }
 
-    if task == 1:
-        test_dict['train']['motion'] = []
-        test_dict['train']['dynamic'] = []
-        test_dict['train']['static'] = []
-    elif task == 2: 
-        test_dict['train']['static'] = []
-        test_dict['train']['resp'] = []
-    elif task == 3:
-        test_dict['train']['static'] = []
-        test_dict['train']['breath'] = []
-    elif task == 4:
-        test_dict['train']['static'] = []
-        test_dict['train']['breath'] = []
-    else:
-        raise ValueError(f'Unrecognized task: {task}')
+    for data_set in ['train', 'val']:
+        if task == 1:
+            test_dict[data_set]['motion'] = []
+            test_dict[data_set]['dynamic'] = []
+            test_dict[data_set]['static'] = []
+        elif task == 2: 
+            test_dict[data_set]['static'] = []
+            test_dict[data_set]['resp'] = []
+        elif task == 3:
+            test_dict[data_set]['static'] = []
+            test_dict[data_set]['breath'] = []
+        elif task == 4:
+            test_dict[data_set]['static'] = []
+            test_dict[data_set]['breath'] = []
+        else:
+            raise ValueError(f'Unrecognized task: {task}')
 
     odgt = [json.loads(x.rstrip()) for x in open(odgt_fp, 'r')]
 
@@ -86,46 +87,43 @@ def odgt2test(odgt_fp, task, subject_id, window_size, overlap_size):
         df = pd.read_csv(recording['filepath'])
         df = drop_unwanted_columns(df)
         samples = get_sliding_windows(df.to_numpy(), window_size, overlap_size)
-        if recording['subject'] != subject_id:
-            for sample in samples:
-                test_dict['train']['X'].append(sample)
-                test_dict['train']['y'].append(recording['annotation'])
-                if task == 1:
-                    test_dict['train']['motion'].append(recording['labels'][0])
-                    test_dict['train']['dynamic'].append(recording['labels'][1])
-                    test_dict['train']['static'].append(recording['labels'][2])
-                elif task == 2:
-                    test_dict['train']['static'].append(recording['labels'][0])
-                    test_dict['train']['resp'].append(recording['labels'][1])
-                elif task == 3:
-                    test_dict['train']['static'].append(recording['labels'][0])
-                    test_dict['train']['breath'].append(recording['labels'][1])
-                elif task == 4:
-                    test_dict['train']['static'].append(recording['labels'][0])
-                    test_dict['train']['breath'].append(recording['labels'][1])
-        else:
-            for sample in samples:
-                test_dict['val']['X'].append(sample)
-                test_dict['val']['y'].append(recording['annotation'])
 
+        data_set = 'train' if recording['subject'] != subject_id else 'val'
+        for sample in samples:
+            test_dict[data_set]['X'].append(sample)
+            test_dict[data_set]['y'].append(recording['annotation'])
+            if task == 1:
+                test_dict[data_set]['motion'].append(recording['labels'][0])
+                test_dict[data_set]['dynamic'].append(recording['labels'][1])
+                test_dict[data_set]['static'].append(recording['labels'][2])
+            elif task == 2:
+                test_dict[data_set]['static'].append(recording['labels'][0])
+                test_dict[data_set]['resp'].append(recording['labels'][1])
+            elif task == 3:
+                test_dict[data_set]['static'].append(recording['labels'][0])
+                test_dict[data_set]['breath'].append(recording['labels'][1])
+            elif task == 4:
+                test_dict[data_set]['static'].append(recording['labels'][0])
+                test_dict[data_set]['breath'].append(recording['labels'][1])
         
     test_dict['train']['X'] = np.array(test_dict['train']['X'])
     test_dict['train']['y'] = np.array(test_dict['train']['y'])
     test_dict['val']['X'] = np.array(test_dict['val']['X'])
     test_dict['val']['y'] = np.array(test_dict['val']['y'])
 
-    if task == 1:
-        test_dict['train']['motion'] = np.array(test_dict['train']['motion'])
-        test_dict['train']['dynamic'] = np.array(test_dict['train']['dynamic'])
-        test_dict['train']['static'] = np.array(test_dict['train']['static'])
-    elif task == 2:
-        test_dict['train']['static'] = np.array(test_dict['train']['static'])
-        test_dict['train']['resp'] = np.array(test_dict['train']['resp'])
-    elif task == 3:
-        test_dict['train']['static'] = np.array(test_dict['train']['static'])
-        test_dict['train']['breath'] = np.array(test_dict['train']['breath'])
-    elif task == 4:
-        test_dict['train']['static'] = np.array(test_dict['train']['static'])
-        test_dict['train']['breath'] = np.array(test_dict['train']['breath'])
+    for data_set in ['train', 'val']:
+        if task == 1:
+            test_dict[data_set]['motion'] = np.array(test_dict[data_set]['motion'])
+            test_dict[data_set]['dynamic'] = np.array(test_dict[data_set]['dynamic'])
+            test_dict[data_set]['static'] = np.array(test_dict[data_set]['static'])
+        elif task == 2:
+            test_dict[data_set]['static'] = np.array(test_dict[data_set]['static'])
+            test_dict[data_set]['resp'] = np.array(test_dict[data_set]['resp'])
+        elif task == 3:
+            test_dict[data_set]['static'] = np.array(test_dict[data_set]['static'])
+            test_dict[data_set]['breath'] = np.array(test_dict[data_set]['breath'])
+        elif task == 4:
+            test_dict[data_set]['static'] = np.array(test_dict[data_set]['static'])
+            test_dict[data_set]['breath'] = np.array(test_dict[data_set]['breath'])
 
     return test_dict

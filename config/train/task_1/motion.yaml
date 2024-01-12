@@ -2,23 +2,13 @@ DATASET:
   num_classes: 2
   
 MODEL:
-  ARCH:
-    LSTM:
-      hidden_size: 0
-      num_layers: 0
-    MLP:
-      dropout: 1.0
-      hidden_size: 0
-      num_layers: 0
   INPUT:
     format: summary
     sensor: accel
 
 TRAIN:
   LEN:
-    num_epoch: 5
+    num_epoch: 2
   OPTIM:
     optim: adam
     lr: 0.01
-    momentum: 0.9
-    weight_decay: 0.0005

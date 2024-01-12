@@ -4,7 +4,7 @@ DATASET:
 MODEL:
   INPUT:
     format: summary
-    sensor: accel
+    sensor: all
 
 TRAIN:
   LEN:

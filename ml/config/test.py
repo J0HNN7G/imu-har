@@ -28,6 +28,8 @@ cfg.MODEL.CONFIG.dynamic = ""
 cfg.MODEL.CONFIG.static = ""
 # breathing classifier configuration file
 cfg.MODEL.CONFIG.breath = ""
+# respiratory classifier configuration file
+cfg.MODEL.CONFIG.resp = ""
 
 cfg.MODEL.INPUT = CN()
 # window size

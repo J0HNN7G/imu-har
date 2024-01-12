@@ -1,0 +1,14 @@
+DATASET:
+  task: 3
+
+MODEL:
+  CONFIG:
+    static: config/train/task_3/static.yaml
+    breath: config/train/task_3/breath.yaml
+  INPUT:
+    window_size: 50
+
+TEST:
+  DATA:
+    overlap_size: 40
+    batch_size: 128

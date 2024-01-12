@@ -11,5 +11,5 @@ MODEL:
 
 TEST:
   DATA:
-    overlap_size: 0
+    overlap_size: 40
     batch_size: 128

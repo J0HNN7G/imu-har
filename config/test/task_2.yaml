@@ -1,0 +1,14 @@
+DATASET:
+  task: 2
+
+MODEL:
+  CONFIG:
+    static: config/train/task_2/static.yaml
+    resp: config/train/task_2/resp.yaml
+  INPUT:
+    window_size: 50
+
+TEST:
+  DATA:
+    overlap_size: 40
+    batch_size: 128
