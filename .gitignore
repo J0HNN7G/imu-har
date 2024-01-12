@@ -13,7 +13,6 @@ ckpt/*
 !ckpt/test/
 # slurm
 slurm/*
-!slurm/config/template.json
 !slurm/templates/
 !slurm/train/scripts/
 !slurm/test/scripts/
