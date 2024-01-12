@@ -2,14 +2,10 @@
 import os
 import json
 import argparse
-
 from itertools import product
 
-# grid generation
-import numpy as np
-
-
 # constants
+TASK_OPTS = ['motion', 'dynamic', 'static', 'breath', 'resp']
 LOC_OPTS = ['PERSONAL', 'EDI']
 
 PARAM_LIST = ['MODEL.INPUT.window_size', 
@@ -28,7 +24,7 @@ SEP = ','
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description="Slurm Grid Search Experiment Setup for PDIoT"
+        description="Slurm Grid Search Experiment Setup for HAR components"
     )
     parser.add_argument(
         "-c", "--config",
@@ -43,6 +39,14 @@ if __name__ == '__main__':
         metavar="STR",
         choices=LOC_OPTS,
         help="Working directory [PERSONAL,EDI]",
+        type=str,
+    )
+    parser.add_argument(
+        "-t", "--task",
+        required=True,
+        metavar="STR",
+        choices=TASK_OPTS,
+        help="what HAR model component to train [motion, dynamic, static, breath, resp]",
         type=str,
     )
 
@@ -70,7 +74,7 @@ if __name__ == '__main__':
         raise ValueError('Unsupported choice!')
 
         
-    exp_name = cfg['TASK'] 
+    exp_name = args.task
     main_project_path = os.path.join(MAIN_HOME, MAIN_USER, MAIN_PROJECT)
     train_path = os.path.join(main_project_path, cfg['TRAIN_FN'])
     config_path = os.path.join(main_project_path, cfg['CONFIG_DN'], f"{exp_name}.yaml" )

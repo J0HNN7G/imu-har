@@ -2,7 +2,7 @@
 # Author(s): James Owers (james.f.owers@gmail.com), Jonathan Gustafsson Frennert (jonathan.frennert@gmail.com)
 #
 # Run an sbatch arrayjob with a file containing a list of
-# commands to run with PennFudanPed dataset on online node.
+# commands to run with dataset on online node.
 # 
 # Assuming this file has been edited and renamed slurm_arrayjob.sh, here's an
 # example usage:
@@ -38,7 +38,7 @@ DATASET_NAME=pdiot-data
 OUTPUT_DN=ckpt
 INPUT_PATH=${DATA_DN}/sets
 
-DATA_SCRIPT_FN=pd_train_odgt.py
+DATA_SCRIPT_FN=pd_odgt.py
 DATA_LOG_FN=wandb_ckpt.py
 DATA_LOG_KEY_FN=wandb_key.txt
 DATA_LINK=git@github.com:specknet/pdiot-data.git

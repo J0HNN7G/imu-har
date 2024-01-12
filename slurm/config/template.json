@@ -15,11 +15,12 @@
         "PROJECT" : "pdiot-ml"
     },
     "DATASET": "pdiot-data",
-    "CONFIG_DN": "cfg",
+    "CONFIG_DN": "config",
     "DATA_DN": "data/sets",
     "CKPT_DN": "ckpt",
     "SLURM_DN": "slurm",
-    "TRAIN_FN": train.py",
+    "TRAIN_FN": "train.py",
+    "TEST_FN": "test.py",
     "EXP": {
         "CSV": {
             "DEFAULT_FN" : "EXP.csv",
