@@ -9,17 +9,14 @@ data/sets/*
 # checkpoints
 ckpt/*
 !ckpt/android/
-!ckpt/train/
-!ckpt/test/
 # slurm
 slurm/*
 !slurm/templates/
 !slurm/train/scripts/
 !slurm/test/scripts/
 # wandb
-wandb/keys/*
-!wandb/keys/template.txt
-wandb/train/*
+wandb/*
+!wandb/templates/
 !wandb/train/scripts/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,java,jupyternotebooks
