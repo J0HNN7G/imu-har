@@ -173,7 +173,7 @@ echo "Moving output data back to DFS"
 EXP_NAME=${VALS[$LEN - 2]}
 src_path=${SCRATCH_PROJECT_PATH}/${OUTPUT_DN}/${EXP_NAME}
 dest_path=${MAIN_PROJECT_PATH}/${OUTPUT_DN}/${EXP_NAME}
-rsync --archive --update --compress --progress ${src_path}/ ${dest_path}
+rsync --archive --update --compress --progress ${src_path}/ ${dest_path}/
 
 
 # ======================================
