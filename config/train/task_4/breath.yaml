@@ -4,10 +4,11 @@ DATASET:
 MODEL:
   ARCH:
     CNN:
-      kernel_size: 3
+      depth_scaling: 0.5
+      kernel_size: 7
       pool_size: 2
       dropout: 0.0
-      hidden_size: 32
+      hidden_size: 64
       num_layers: 2
     MLP:
       dropout: 0.5
@@ -16,3 +17,4 @@ MODEL:
   INPUT:
     format: window
     sensor: all
+    fft: True

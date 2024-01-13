@@ -43,6 +43,10 @@ cfg.MODEL.INPUT.sensor = "all"
 cfg.MODEL.INPUT.format = "normal"
 # size of the window used for input data segmentation
 cfg.MODEL.INPUT.window_size = 50
+# include fourier transform of input data
+cfg.MODEL.INPUT.fft = False
+# include norm of accel and gyro data
+cfg.MODEL.INPUT.norm = False
 
 
 # model architecture specification

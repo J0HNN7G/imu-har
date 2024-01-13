@@ -2,10 +2,14 @@
 
 # architectures
 import tensorflow as tf
+import numpy as np
 
 # timing
 from timeit import default_timer as timer
 
+# Sampling rate
+SAMPLING_RATE = 25
+SAMPLING_TIME = 1 / SAMPLING_RATE
 
 # number of sensors
 NUM_SENSORS = 6
@@ -46,6 +50,33 @@ class BestModelCallback(tf.keras.callbacks.Callback):
         self.model.set_weights(self.best_model_weights)
 
 
+###################
+# CUSTOM FEATURES #
+###################
+
+def add_norm(imu_data):
+    features = [imu_data]
+    for i in range(0, imu_data.shape[-1], 3):
+        norm = tf.norm(imu_data[:, :, i:i+3], axis=-1)
+        features.append(tf.expand_dims(norm, axis=-1))
+    
+    features = tf.concat(features, axis=-1)
+
+    return features
+
+
+def add_fft(imu_data):
+    # only on innermost axis
+    fft_real = tf.transpose(imu_data, perm=[0, 2, 1])
+    fft_real = tf.signal.rfft(fft_real)
+    fft_real = tf.transpose(fft_real, perm=[0, 2, 1])
+
+    fft_feats = tf.abs(fft_real)
+
+    feats = tf.concat((fft_feats, imu_data), axis=1)
+    
+    return feats
+
 class InputTransformBuilder:
     """
     Builder class for transforming input to features for classfication models.
@@ -83,6 +114,14 @@ class InputTransformBuilder:
             transform.add(sensors)
         else:
             raise Exception('Sensor undefined!')
+        
+        # what features to add to data
+        if args.norm:
+            norm = tf.keras.layers.Lambda(lambda x: add_norm(x))
+            transform.add(norm)
+        if args.fft:
+            fft = tf.keras.layers.Lambda(lambda x: add_fft(x))
+            transform.add(fft)
 
         # how to process that data
         if (args.format == 'window'):
@@ -212,10 +251,10 @@ class ModelBuilder:
                     classifier.add(tf.keras.layers.Conv1D(filters=hidden_size,
                                                         kernel_size=args.ARCH.CNN.kernel_size,
                                                         activation='relu',
-                                                        kernel_regularizer=tf.keras.regularizers.l2(args.l2),
-                                                        padding='same'))
-                #classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size, padding='same'))
-                #classifier.add(tf.keras.layers.Dropout(args.ARCH.CNN.dropout))
+                                                        kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
+                    
+                if args.ARCH.CNN.pool_size > 1:
+                    classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size))
             else:
                 if args.ARCH.CNN.residual:
                     classifier.add(ResidualBlock(filters=hidden_size,
@@ -226,11 +265,15 @@ class ModelBuilder:
                     classifier.add(tf.keras.layers.Conv1D(filters=hidden_size,
                                                         kernel_size=args.ARCH.CNN.kernel_size,
                                                         activation='relu',
-                                                        kernel_regularizer=tf.keras.regularizers.l2(args.l2),
-                                                        padding='same'))
-                classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size, padding='same'))
-                classifier.add(tf.keras.layers.Dropout(args.ARCH.CNN.dropout))
-                classifier.add(tf.keras.layers.GlobalAveragePooling1D())
+                                                        kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
+                    
+                if args.ARCH.CNN.pool_size > 1:
+                    classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size))
+                if args.ARCH.CNN.dropout > 0:
+                    classifier.add(tf.keras.layers.Dropout(args.ARCH.CNN.dropout))
+
+                if args.ARCH.LSTM.num_layers == 0:
+                    classifier.add(tf.keras.layers.GlobalAveragePooling1D())
         # LSTM
         for i in range(args.ARCH.LSTM.num_layers):
             if i < args.ARCH.LSTM.num_layers - 1:
@@ -241,13 +284,15 @@ class ModelBuilder:
                 classifier.add(tf.keras.layers.LSTM(args.ARCH.LSTM.hidden_size, 
                                                     return_sequences=False,
                                                     kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
-                classifier.add(tf.keras.layers.Dropout(args.ARCH.LSTM.dropout))
+                if args.ARCH.LSTM.dropout > 0:
+                    classifier.add(tf.keras.layers.Dropout(args.ARCH.LSTM.dropout))
 
         # MLP
         for _ in range(args.ARCH.MLP.num_layers):
             classifier.add(tf.keras.layers.Dense(units=args.ARCH.MLP.hidden_size, 
                                                  activation='relu',
                                                  kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
+        if args.ARCH.MLP.dropout > 0:
             classifier.add(tf.keras.layers.Dropout(args.ARCH.MLP.dropout))
 
         # Final Activation
@@ -344,8 +389,7 @@ class ResidualBlock(tf.keras.layers.Layer):
         self.conv1 = tf.keras.layers.Conv1D(
             self.filters, 
             self.kernel_size, 
-            strides=self.strides, 
-            padding='same',
+            strides=self.strides,
             kernel_regularizer=tf.keras.regularizers.l2(self.l2_reg)
         )
         self.batch_norm1 = tf.keras.layers.BatchNormalization()
@@ -354,8 +398,7 @@ class ResidualBlock(tf.keras.layers.Layer):
         self.conv2 = tf.keras.layers.Conv1D(
             self.filters, 
             kernel_size=1, 
-            strides=self.strides, 
-            padding='same',
+            strides=self.strides,
             kernel_regularizer=tf.keras.regularizers.l2(self.l2_reg)
         )
         self.batch_norm2 = tf.keras.layers.BatchNormalization()
