@@ -124,7 +124,7 @@ MODEL:
     CNN:
       kernel_size: 7
       pool_size: 2
-      dropout: 0.5
+      dropout: 0.0
       hidden_size: 32
       num_layers: 2
     MLP:
