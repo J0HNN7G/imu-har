@@ -269,7 +269,7 @@ class ModelBuilder:
                     
                 if args.ARCH.CNN.pool_size > 1:
                     classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size))
-                if args.ARCH.CNN.dropout > 0:
+                if (args.ARCH.CNN.dropout > 0) and (args.ARCH.CNN.dropout != 1.0):
                     classifier.add(tf.keras.layers.Dropout(args.ARCH.CNN.dropout))
 
                 if args.ARCH.LSTM.num_layers == 0:
@@ -284,7 +284,7 @@ class ModelBuilder:
                 classifier.add(tf.keras.layers.LSTM(args.ARCH.LSTM.hidden_size, 
                                                     return_sequences=False,
                                                     kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
-                if args.ARCH.LSTM.dropout > 0:
+                if (args.ARCH.LSTM.dropout > 0) and (args.ARCH.LSTM.dropout != 1.0):
                     classifier.add(tf.keras.layers.Dropout(args.ARCH.LSTM.dropout))
 
         # MLP
@@ -292,7 +292,7 @@ class ModelBuilder:
             classifier.add(tf.keras.layers.Dense(units=args.ARCH.MLP.hidden_size, 
                                                  activation='relu',
                                                  kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
-        if args.ARCH.MLP.dropout > 0:
+        if (args.ARCH.MLP.dropout > 0) and (args.ARCH.MLP.dropout != 1.0):
             classifier.add(tf.keras.layers.Dropout(args.ARCH.MLP.dropout))
 
         # Final Activation
