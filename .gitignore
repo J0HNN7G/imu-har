@@ -13,12 +13,12 @@ ckpt/*
 # slurm
 slurm/*
 !slurm/templates/
-!slurm/train/scripts/
-!slurm/test/scripts/
+!slurm/train/scripts/*.py
+!slurm/test/scripts/*.py
 # wandb
 wandb/*
 !wandb/templates/
-!wandb/train/scripts/
+!wandb/train/scripts/*.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,java,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,java,jupyternotebooks
