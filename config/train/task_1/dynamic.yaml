@@ -11,11 +11,11 @@ MODEL:
       num_layers: 2
     LSTM:
       dropout: 0.5
-      hidden_size: 100
-      num_layers: 1
+      hidden_size: 64
+      num_layers: 2
     MLP:
       dropout: 0.0
-      hidden_size: 100
+      hidden_size: 64
       num_layers: 1
   INPUT:
     format: window
@@ -24,4 +24,4 @@ MODEL:
 
 TRAIN:
   LEN:
-    num_epoch: 15
+    num_epoch: 20

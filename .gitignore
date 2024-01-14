@@ -1,5 +1,6 @@
 ### Personal ###
-TODO
+# plot
+*.pdf
 # configs
 config/*
 !config/train/
