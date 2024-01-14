@@ -1,6 +1,4 @@
 ### Personal ###
-# plot
-*.pdf
 # configs
 config/*
 !config/train/
