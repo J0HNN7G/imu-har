@@ -141,7 +141,7 @@ MODEL:
 
 3. Run the training
 ```
-python train.py -c <config_filepath> -i <train_val_odgt_dirpath> -o <checkpoint_dirpath>
+python train.py -c <config_dirpath> -i <train_val_odgt_dirpath> -o <checkpoint_dirpath> -t <task> -p <component>
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
