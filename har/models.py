@@ -16,11 +16,17 @@ NUM_SENSORS = 6
 
 # task details
 TASK_MODEL_DICT = {
-    1: ['motion', 'dynamic', 'static'],
-    2: ['static', 'resp'],
-    3: ['static', 'breath'],
-    4: ['static', 'breath']
+    1: {'motion' : 2, 
+        'dynamic': 6, 
+        'static': 5},
+    2: {'static': 5, 
+        'resp': 3},
+    3: {'static' : 5, 
+        'breath' : 4},
+    4: {'static' : 5, 
+        'breath' : 4}
 }
+
 STATIC_MAX_LEN = 5
 
 

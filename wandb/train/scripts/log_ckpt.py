@@ -4,6 +4,7 @@ import os
 import argparse
 
 from har.config.train import cfg
+from yacs.config import CfgNode as CN
 
 # help
 import logging
@@ -20,6 +21,14 @@ VAL_VALUE_NAME = f'{VAL_NAME}_{VALUE_NAME}'
 BEST_VALUE_NAME = f'best_{VAL_VALUE_NAME}'
 SEP = ','
 
+def add_to_wandb_config(wandb_config, yacs_config, prefix=""):
+    for key, value in yacs_config.items():
+        if isinstance(value, CN):
+            add_to_wandb_config(wandb_config, value, f"{prefix}/{key}" if prefix else key)
+        else:
+            wandb_config[f"{prefix}/{key}" if prefix else key] = value
+
+
 def main(cfg):
     """
     Main function for performing logging with Wandb for PDIoT classification training.
@@ -30,48 +39,16 @@ def main(cfg):
     Returns:
     None
     """
-    # remove batch run from name:
-    if cfg.MODEL.ARCH.MLP.num_layers + cfg.MODEL.ARCH.LSTM.num_layers == 0:
-         arch_name = 'log'
-    elif cfg.MODEL.ARCH.MLP.num_layers > 0:
-         arch_name = 'mlp'
-    elif cfg.MODEL.ARCH.LSTM.num_layers > 0:
-         arch_name = 'lstm'
-    else:
-        raise ValueError('Invalid architecture!')
-    
-    dataset_name = cfg.DATASET.path.split('/')[-1].lower()
-    task_name = cfg.DATASET.LIST.train.split('_')[1].lower()
-    exp_name = f'{task_name}-{arch_name}'
+    exp_name = f't{cfg.DATASET.task}-{cfg.DATASET.component}'
 
+    # Assuming exp_name is defined elsewhere in your code
     run = wandb.init(
         project='pdiot-ml',
         name=exp_name,
-        config = {
-            'task' : task_name,
-            'architecture': arch_name,
-            'dataset' : dataset_name,
-            'num_classes' : cfg.DATASET.num_classes,
-            f'{TRAIN_NAME}/data/batch_size' : cfg.TRAIN.DATA.batch_size, 
-            f'{TRAIN_NAME}/data/overlap_size' : cfg.TRAIN.DATA.overlap_size, 
-            f'{TRAIN_NAME}/len/epochs' : cfg.TRAIN.LEN.num_epoch,
-            f'{TRAIN_NAME}/len/early_stop' : cfg.TRAIN.LEN.early_stop,
-            f'{TRAIN_NAME}/optim/optimizer' : cfg.TRAIN.OPTIM.optim,
-            f'{TRAIN_NAME}/optim/momentum' : cfg.TRAIN.OPTIM.momentum, 
-            f'{TRAIN_NAME}/optim/weight_decay' : cfg.TRAIN.OPTIM.weight_decay, 
-            f'{TRAIN_NAME}/optim/lr': cfg.TRAIN.OPTIM.lr,
-            f'{TRAIN_NAME}/lr/schedule': cfg.TRAIN.LR.schedule,
-            f'{TRAIN_NAME}/lr/step_size' : cfg.TRAIN.LR.step_size,
-            f'{MODEL_NAME}/input/format' : cfg.MODEL.INPUT.format,
-            f'{MODEL_NAME}/input/sensor' : cfg.MODEL.INPUT.sensor,
-            f'{MODEL_NAME}/input/window_size' : cfg.MODEL.INPUT.window_size,
-            f'{MODEL_NAME}/arch/mlp/num_layers' : cfg.MODEL.ARCH.MLP.num_layers,
-            f'{MODEL_NAME}/arch/mlp/hidden_size' : cfg.MODEL.ARCH.MLP.hidden_size,
-            f'{MODEL_NAME}/arch/mlp/dropout' : cfg.MODEL.ARCH.MLP.dropout,
-            f'{MODEL_NAME}/arch/lstm/num_layers' : cfg.MODEL.ARCH.LSTM.num_layers,
-            f'{MODEL_NAME}/arch/lstm/hidden_size' : cfg.MODEL.ARCH.LSTM.hidden_size,
-        }
+        config={}
     )
+    add_to_wandb_config(run.config, cfg)
+
 
     with open(cfg.TRAIN.history, 'r') as f:
             lines = f.readlines()

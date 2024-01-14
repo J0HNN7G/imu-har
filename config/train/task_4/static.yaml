@@ -1,5 +1,6 @@
 DATASET:
-  num_classes: 5
+  task: 4
+  component: 'static'
 
 MODEL:
   INPUT:

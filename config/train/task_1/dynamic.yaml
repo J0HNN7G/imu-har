@@ -1,5 +1,6 @@
 DATASET:
-  num_classes: 6
+  task: 1
+  component: 'dynamic'
 
 MODEL:
   ARCH:

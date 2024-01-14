@@ -13,8 +13,9 @@ import traceback
 import tensorflow as tf
 
 # training
+from test import DATA_ODGT_FORMAT, TASK_CFG_DIR, CFG_EXT
 from har.config.train import cfg
-from har.models import ModelBuilder, OptimizerBuilder, LRScheduleBuilder, TimingCallback
+from har.models import TASK_MODEL_DICT, ModelBuilder, OptimizerBuilder, LRScheduleBuilder, TimingCallback
 from har.dataset import odgt2train
 
 
@@ -30,16 +31,16 @@ def main(cfg):
     """
     logging.info('Training Starting!')
     # model
-    train_odgt_fp = os.path.join(cfg.DATASET.path, cfg.DATASET.LIST.train)
-    val_odgt_fp = os.path.join(cfg.DATASET.path, cfg.DATASET.LIST.val)
+    odgt_fp = os.path.join(cfg.DATASET.path, cfg.DATASET.odgt)
 
-    train_X, train_y = odgt2train(train_odgt_fp, cfg.MODEL.INPUT.window_size, 
+    train_X, val_X, train_y, val_y = odgt2train(odgt_fp, 
+                                                cfg.DATASET.task,
+                                                cfg.DATASET.component,
+                                                cfg.MODEL.INPUT.window_size, 
                                                 cfg.TRAIN.DATA.overlap_size)
-    val_X, val_y = odgt2train(val_odgt_fp, cfg.MODEL.INPUT.window_size, 
-                                          cfg.TRAIN.DATA.overlap_size)
-
-        
-    model = ModelBuilder.build_classifier(cfg.MODEL, '', cfg.DATASET.num_classes)
+    
+    num_classes = TASK_MODEL_DICT[cfg.DATASET.task][cfg.DATASET.component]
+    model = ModelBuilder.build_classifier(cfg.MODEL, '', num_classes)
     optimizer = OptimizerBuilder.build_optimizer(cfg.TRAIN.OPTIM)
     loss = tf.keras.losses.SparseCategoricalCrossentropy()
     metrics = [
@@ -87,7 +88,7 @@ if __name__ == '__main__':
         "-c", "--config",
         required=True,
         metavar="PATH",
-        help="absolute path to config file",
+        help="absolute path to config directory",
         type=str,
     )
     parser.add_argument(
@@ -105,13 +106,46 @@ if __name__ == '__main__':
         type=str,
     )
     parser.add_argument(
+        "-t", "--task",
+        required=True,
+        metavar="INT",
+        help="which task to test on",
+        type=int,
+    )
+    parser.add_argument(
+        "-p", "--part",
+        required=True,
+        metavar="STR",
+        help="which part of the model to train",
+        type=str,
+    )
+    parser.add_argument(
         "opts",
         help="Modify config options using the command-line",
         default=None,
         nargs=argparse.REMAINDER,
     )
     args = parser.parse_args()
-    cfg.merge_from_file(args.config)
+
+    if not args.task in TASK_MODEL_DICT.keys():
+        raise ValueError(f'Invalid task: {args.task}')
+    if not args.part in TASK_MODEL_DICT[args.task].keys():
+        raise ValueError(f'Invalid part for task: {args.task}')
+
+    # get config file and check directory set up is correct
+    if not os.path.isdir(args.config):
+        raise ValueError(f'Config directory does not exist: {args.config}')
+
+    train_cfg_fp = os.path.join(args.config, 'train', TASK_CFG_DIR.format(args.task), args.part + CFG_EXT)
+    if not os.path.isfile(train_cfg_fp):
+        raise ValueError(f'Train config file does not exist: {train_cfg_fp}')
+    
+
+    if args.task in [1, 2, 3]:
+        cfg.DATASET.odgt = DATA_ODGT_FORMAT.format(args.task)
+    elif args.task == 4:
+        cfg.DATASET.odgt = DATA_ODGT_FORMAT.format(3)
+    cfg.merge_from_file(train_cfg_fp)
     cfg.merge_from_list(args.opts)
     cfg.DATASET.path = args.input
     cfg.TRAIN.path = args.output

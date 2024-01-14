@@ -15,7 +15,7 @@ cfg.DATASET.path = ""
 # task odgt filename
 cfg.DATASET.odgt = ""
 # task number
-cfg.DATASET.task = 1
+cfg.DATASET.task = -1
 
 # -----------------------------------------------------------------------------
 # HAR model

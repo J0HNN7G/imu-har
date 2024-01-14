@@ -5,6 +5,8 @@ import pandas as pd
 from numpy.lib.stride_tricks import sliding_window_view
 
 
+TRAIN_FRAC = 0.95
+
 def drop_unwanted_columns(dataframe):
     drop_list = dataframe.filter(['timestamp', 'mag_x', 'mag_y', 'mag_z', 'ind', 'Unnamed: 0'])
     return dataframe.drop(drop_list, axis=1)
@@ -28,7 +30,7 @@ def get_sliding_windows(data, window_size, overlap_size):
     return windows
 
 
-def odgt2train(odgt_fp, window_size, overlap_size):
+def odgt2train(odgt_fp, task, part, window_size, overlap_size):
     odgt = [json.loads(x.rstrip()) for x in open(odgt_fp, 'r')]
     
     X = []
@@ -44,12 +46,90 @@ def odgt2train(odgt_fp, window_size, overlap_size):
     X = np.array(X)
     y = np.array(y)
 
-    # Convert labels to one-hot encoding using numpy
-    #y_onehot = np.zeros((len(y), num_classes))
-    #y_onehot[np.arange(len(y)), y] = 1
-    #y = np.array(y_onehot)
+    return train_X, val_X, train_y, val_y
 
-    return X, y
+
+
+
+def odgt2train(odgt_fp, task, part, window_size, overlap_size):
+    odgt = [json.loads(x.rstrip()) for x in open(odgt_fp, 'r')]
+
+    X = []
+    y = []
+
+    class_indices = {}  # Dictionary to store indices for each class
+
+    for recording in odgt:
+        df = pd.read_csv(recording['filepath'])
+        df = drop_unwanted_columns(df)
+
+        # Determine the correct index from recording['labels'] based on the 'task' and 'part' arguments
+        if task == 1:
+            if part == 'motion':
+                label_index = 0
+            elif part == 'dynamic':
+                label_index = 1
+            elif part == 'static':
+                label_index = 2
+            else:
+                raise ValueError(f'Invalid part: {part} for task: {task}')
+        elif task == 2:
+            if part == 'static':
+                label_index = 0
+            elif part == 'resp':
+                label_index = 1
+            else:
+                raise ValueError(f'Invalid part: {part} for task: {task}')
+        elif task in [3, 4]:
+            if part == 'static':
+                label_index = 0
+            elif part == 'breath':
+                label_index = 1
+            else:
+                raise ValueError(f'Invalid part: {part} for task: {task}')
+        else:
+            raise ValueError(f'Unrecognized task: {task}')
+
+        # Check if the label is valid before proceeding
+        if recording['labels'][label_index] != -1:
+
+            label = recording['labels'][label_index]
+            samples = get_sliding_windows(df.to_numpy(), window_size, overlap_size)
+
+            for sample in samples:
+                X.append(sample)
+                y.append(label)
+                if label not in class_indices:
+                    class_indices[label] = []
+                
+                class_indices[label].append(len(X) - 1)  # Store the index for the corresponding class
+
+    # Calculate the train and validation split
+    train_indices = []
+    val_indices = []
+
+    for class_label, indices in class_indices.items():
+        num_samples = len(indices)
+        limit = int(num_samples * TRAIN_FRAC)
+
+        # shuffle users
+        indices = np.random.permutation(indices)
+
+        train_indices.extend(indices[:limit])
+        val_indices.extend(indices[limit:])
+
+    # Shuffle classes
+    np.random.shuffle(train_indices)
+    np.random.shuffle(val_indices)
+
+    # Extract features and labels for train and validation sets
+    train_X = np.array([X[i] for i in train_indices])
+    val_X = np.array([X[i] for i in val_indices])
+
+    train_y = np.array([y[i] for i in train_indices])
+    val_y = np.array([y[i] for i in val_indices])
+
+    return train_X, val_X, train_y, val_y
 
 
 def odgt2test(odgt_fp, task, subject_id, window_size, overlap_size):

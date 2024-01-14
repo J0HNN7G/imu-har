@@ -1,5 +1,6 @@
 DATASET:
-  num_classes: 4
+  task: 4
+  component: 'breath'
 
 MODEL:
   ARCH:

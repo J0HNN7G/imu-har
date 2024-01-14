@@ -45,7 +45,7 @@ def main(cfg_test):
                                         cfg_test.TEST.DATA.overlap_size)
     
 
-    components = TASK_MODEL_DICT[cfg_test.DATASET.task]
+    components = TASK_MODEL_DICT[cfg_test.DATASET.task].keys()
     model_dict = {}
     for component in components:
         logging.info(component)
@@ -152,11 +152,14 @@ if __name__ == '__main__':
         nargs=argparse.REMAINDER,
     )
     args = parser.parse_args()
+    
+    if not args.task in TASK_MODEL_DICT.keys():
+        raise ValueError(f'Invalid task: {args.task}')
 
     # get config file and check directory set up is correct
     if not os.path.isdir(args.config):
         raise ValueError(f'Config directory does not exist: {args.config}')
-    
+
     test_cfg_fp = os.path.join(args.config, 'test', TASK_CFG_DIR.format(args.task) + CFG_EXT)
     if not os.path.isfile(test_cfg_fp):
         raise ValueError(f'Test config file does not exist: {test_cfg_fp}')
@@ -167,7 +170,7 @@ if __name__ == '__main__':
         raise ValueError(f'Task number in config does not match task number in args!: (cfg) {cfg_test.DATASET.task} != (arg) {args.task}')
 
     train_cfg_fp = os.path.join(args.config, 'train', TASK_CFG_DIR.format(args.task))
-    for component in TASK_MODEL_DICT[cfg_test.DATASET.task]:
+    for component in TASK_MODEL_DICT[cfg_test.DATASET.task].keys():
         cfg_fp = os.path.join(train_cfg_fp, cfg_test.MODEL.CONFIG[component])
         if not os.path.isfile(cfg_fp):
             raise ValueError(f'Train config file for component {component} does not exist!')

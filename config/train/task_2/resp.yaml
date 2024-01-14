@@ -1,5 +1,6 @@
 DATASET:
-  num_classes: 3
+  task: 2
+  component: 'resp'
 
 MODEL:
   ARCH:

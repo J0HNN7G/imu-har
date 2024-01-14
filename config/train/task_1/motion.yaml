@@ -1,5 +1,6 @@
 DATASET:
-  num_classes: 2
+  task: 1
+  component: 'motion'
   
 MODEL:
   INPUT:

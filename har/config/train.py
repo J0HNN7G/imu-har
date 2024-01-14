@@ -20,13 +20,12 @@ cfg = CN()
 cfg.DATASET = CN()
 # path to the root of the dataset directory
 cfg.DATASET.path = ""
-# total number of unique labels model output
-cfg.DATASET.num_classes = -1
-cfg.DATASET.LIST = CN()
-# file path to the training data list
-cfg.DATASET.LIST.train = ""
-# file path to the validation data list
-cfg.DATASET.LIST.val = ""
+# task odgt filename
+cfg.DATASET.odgt = ""
+# task number
+cfg.DATASET.task = -1
+# model component
+cfg.DATASET.component = ""
 
 # -----------------------------------------------------------------------------
 # Model
