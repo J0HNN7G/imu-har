@@ -4,7 +4,18 @@ import json
 import argparse
 from itertools import product
 
-from har.models import TASK_MODEL_DICT
+
+TASK_MODEL_DICT = {
+    1: {'motion' : 2, 
+        'dynamic': 6, 
+        'static': 5},
+    2: {'static': 5, 
+        'resp': 3},
+    3: {'static' : 5, 
+        'breath' : 4},
+    4: {'static' : 5, 
+        'breath' : 4}
+}
 
 # constants
 TASKS = [1,2,3]
