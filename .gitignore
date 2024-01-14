@@ -11,14 +11,14 @@ data/sets/*
 ckpt/*
 !ckpt/android/
 # slurm
-slurm/*
-!slurm/templates/
-!slurm/train/scripts/*.py
-!slurm/test/scripts/*.py
+slurm/*.sh
+slurm/*.json
+slurm/train/*.csv
+slurm/test/*.csv
 # wandb
 wandb/*
 !wandb/templates/
-!wandb/train/scripts/*.py
+!wandb/train/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,java,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,java,jupyternotebooks
