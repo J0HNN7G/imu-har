@@ -8,6 +8,7 @@ data/sets/*
 # checkpoints
 ckpt/*
 !ckpt/android/
+!ckpt/train/
 # slurm
 slurm/*.sh
 slurm/*.json

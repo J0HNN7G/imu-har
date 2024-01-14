@@ -1,0 +1,52 @@
+DATASET:
+  component: motion
+  odgt: full_t1_pdiot-data.odgt
+  path: /disk/scratch/s1915791/git/pdiot-ml/data/sets/pdiot-data
+  task: 1
+MODEL:
+  ARCH:
+    CNN:
+      depth_scaling: 1.0
+      dropout: 1.0
+      hidden_size: 0
+      kernel_size: 0
+      num_layers: 0
+      pool_size: 0
+      residual: False
+    LSTM:
+      dropout: 1.0
+      hidden_size: 0
+      num_layers: 0
+    MLP:
+      dropout: 1.0
+      hidden_size: 0
+      num_layers: 0
+  INPUT:
+    fft: False
+    format: summary
+    norm: False
+    sensor: accel
+    window_size: 50
+  l2: 0.0
+TRAIN:
+  DATA:
+    batch_size: 128
+    overlap_size: 40
+  FN:
+    config: config.yaml
+    history: history.csv
+    log: log.txt
+    weight: weights.hdf5
+  LEN:
+    early_stop: 3
+    num_epoch: 2
+  LR:
+    gamma: 0.1
+    schedule: step
+    step_size: 100
+  OPTIM:
+    lr: 0.01
+    momentum: 0.9
+    optim: adam
+    weight_decay: 0.0005
+  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/train/task_1_motion
