@@ -114,10 +114,8 @@ Custom dataset files are expected to be formatted as follows:
 Example `dynamic.yaml`:
 ```
 DATASET:
-  num_classes: 6
-  LIST:
-    train: train_dynamic_pdiot-data.odgt
-    val: val_dynamic_pdiot-data.odgt
+  task: 1
+  component: 'dynamic'
 
 MODEL:
   ARCH:
@@ -129,20 +127,16 @@ MODEL:
       num_layers: 2
     LSTM:
       dropout: 0.5
-      hidden_size: 100
+      hidden_size: 64
       num_layers: 1
     MLP:
       dropout: 0.0
-      hidden_size: 100
+      hidden_size: 64
       num_layers: 1
   INPUT:
     format: window
     sensor: accel
     fft: True
-
-TRAIN:
-  LEN:
-    num_epoch: 15
 ```
 
 3. Run the training
