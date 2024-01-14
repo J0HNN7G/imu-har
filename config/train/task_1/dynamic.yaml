@@ -12,7 +12,7 @@ MODEL:
     LSTM:
       dropout: 0.5
       hidden_size: 64
-      num_layers: 2
+      num_layers: 1
     MLP:
       dropout: 0.0
       hidden_size: 64
@@ -21,7 +21,3 @@ MODEL:
     format: window
     sensor: accel
     fft: True
-
-TRAIN:
-  LEN:
-    num_epoch: 20

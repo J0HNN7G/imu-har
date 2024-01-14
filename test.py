@@ -62,6 +62,8 @@ def main(cfg_test):
         component_cfg_fp = os.path.join(cfg_test.MODEL.path, cfg_test.MODEL.CONFIG[component])
         cfg_train = default_cfg()
         cfg_train.merge_from_file(component_cfg_fp)
+        logging.info("config:\n{}".format(cfg_train))
+
 
         model = ModelBuilder.build_classifier(cfg_train.MODEL, '', cfg_train.DATASET.num_classes)
         optimizer = OptimizerBuilder.build_optimizer(cfg_train.TRAIN.OPTIM)

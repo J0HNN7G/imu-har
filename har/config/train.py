@@ -104,7 +104,7 @@ cfg.TRAIN.LEN = CN()
 # total number of training epochs
 cfg.TRAIN.LEN.num_epoch = 10
 # stop training if validation hasn't improved for this many epochs
-cfg.TRAIN.LEN.early_stop = 5
+cfg.TRAIN.LEN.early_stop = 3
 
 cfg.TRAIN.OPTIM = CN()
 # algorithm to use for optimization
