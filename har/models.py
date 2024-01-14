@@ -229,9 +229,6 @@ class ModelBuilder:
         
         classifier = tf.keras.Sequential()
 
-        if (args.ARCH.LSTM.num_layers > 0) and (args.ARCH.CNN.num_layers > 0):
-            raise Exception('Cannot use both CNN and LSTM!')
-
         # format input
         needs_window = (args.ARCH.LSTM.num_layers > 0) or (args.ARCH.CNN.num_layers > 0)
         transforms, input_size = InputTransformBuilder.build_transform(args.INPUT, needs_window)
@@ -253,8 +250,8 @@ class ModelBuilder:
                                                         activation='relu',
                                                         kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
                     
-                if args.ARCH.CNN.pool_size > 1:
-                    classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size))
+                #if args.ARCH.CNN.pool_size > 1:
+                #    classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size))
             else:
                 if args.ARCH.CNN.residual:
                     classifier.add(ResidualBlock(filters=hidden_size,
@@ -267,13 +264,13 @@ class ModelBuilder:
                                                         activation='relu',
                                                         kernel_regularizer=tf.keras.regularizers.l2(args.l2)))
                     
-                if args.ARCH.CNN.pool_size > 1:
-                    classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size))
                 if (args.ARCH.CNN.dropout > 0) and (args.ARCH.CNN.dropout != 1.0):
                     classifier.add(tf.keras.layers.Dropout(args.ARCH.CNN.dropout))
-
+                if args.ARCH.CNN.pool_size > 1:
+                    classifier.add(tf.keras.layers.MaxPooling1D(args.ARCH.CNN.pool_size))
                 if args.ARCH.LSTM.num_layers == 0:
                     classifier.add(tf.keras.layers.GlobalAveragePooling1D())
+
         # LSTM
         for i in range(args.ARCH.LSTM.num_layers):
             if i < args.ARCH.LSTM.num_layers - 1:

@@ -122,18 +122,27 @@ DATASET:
 MODEL:
   ARCH:
     CNN:
-      kernel_size: 7
+      kernel_size: 5
       pool_size: 2
-      dropout: 0.0
-      hidden_size: 32
-      num_layers: 2
-    MLP:
       dropout: 0.5
+      hidden_size: 64
+      num_layers: 2
+    LSTM:
+      dropout: 0.5
+      hidden_size: 100
+      num_layers: 1
+    MLP:
+      dropout: 0.0
       hidden_size: 100
       num_layers: 1
   INPUT:
     format: window
     sensor: accel
+    fft: True
+
+TRAIN:
+  LEN:
+    num_epoch: 15
 ```
 
 3. Run the training

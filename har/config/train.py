@@ -120,7 +120,7 @@ cfg.TRAIN.LR = CN()
 # learning rate scheduling method
 cfg.TRAIN.LR.schedule = 'step'
 # number of epochs between learning rate reductions
-cfg.TRAIN.LR.step_size = 10
+cfg.TRAIN.LR.step_size = 100
 # factor to reduce the learning rate
 cfg.TRAIN.LR.gamma = 0.1
 
