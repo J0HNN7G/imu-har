@@ -61,14 +61,16 @@ class BestModelCallback(tf.keras.callbacks.Callback):
 ###################
 
 def add_norm(imu_data):
-    features = [imu_data]
-    for i in range(0, imu_data.shape[-1], 3):
-        norm = tf.norm(imu_data[:, :, i:i+3], axis=-1)
-        features.append(tf.expand_dims(norm, axis=-1))
-    
-    features = tf.concat(features, axis=-1)
+    updated_imu_data = []
 
-    return features
+    for i in range(0, imu_data.shape[-1], 3):
+        norm = tf.norm(imu_data[..., i:i+3], axis=-1)
+        normalized_chunk = imu_data[..., i:i+3] / tf.expand_dims(norm, axis=-1)
+        updated_imu_data.append(normalized_chunk)
+
+    updated_imu_data = tf.concat(updated_imu_data, axis=-1)
+
+    return updated_imu_data
 
 
 def add_fft(imu_data):
