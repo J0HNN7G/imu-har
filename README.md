@@ -100,13 +100,21 @@ python setup.py install
 ```
 
 ## Training
-1. Format activity classification dataset. Example scripts found in `data`.
+1. Format activity classification dataset for your component. Example scripts found in `data`.
 
 Custom dataset files are expected to be formatted as follows:
 ```
-{ 'filepath': <data_csv_filepath>, 'annotation': <label>}
+{ 'filepath': <data_csv_filepath>, 
+  'subject': <subject_id>, 
+  'annotation': <class>, 
+  'labels': [ <motion_label>, 
+              <dynamic_label>, 
+              <static_label> 
+              <breath_label> ]
+}
 ...
 ```
+The number of labels will vary based on the model components required for the task ([Structure](#structure)). Training does not use the annotation, but the label corresponding to the model component being trained. 
 
 
 2. Make configuration YAML file. 
@@ -141,7 +149,7 @@ MODEL:
 
 3. Run the training
 ```
-python train.py -c <config_dirpath> -i <train_val_odgt_dirpath> -o <checkpoint_dirpath> -t <task> -p <component>
+python train.py -c <config_dirpath> -i <odgt_dirpath> -o <checkpoint_dirpath> -t <task> -p <component>
 ```
 
 4. Results are stored at the checkpoint directory. By default your directory will be set up as follows:
