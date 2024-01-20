@@ -1,4 +1,4 @@
-[00:49:22 INFO train.py] Loaded configuration file: /home/s1915791/git/pdiot-ml/config/breath.yaml
+[00:49:22 INFO train.py] Loaded configuration file: /home/s1915791/git/imu-har/config/breath.yaml
 [00:49:22 INFO train.py] Running with config:
 DATASET:
   LIST:
@@ -6,7 +6,7 @@ DATASET:
     train: train_breath_pdiot-data.odgt
     val: val_breath_pdiot-data.odgt
   num_classes: 4
-  path: /disk/scratch/s1915791/git/pdiot-ml/data/sets/pdiot-data
+  path: /disk/scratch/s1915791/git/imu-har/data/sets/pdiot-data
 MODEL:
   ARCH:
     LSTM:
@@ -41,8 +41,8 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_23
-[00:49:22 INFO train.py] Outputting to: /disk/scratch/s1915791/git/pdiot-ml/ckpt/breath_23
+  path: /disk/scratch/s1915791/git/imu-har/ckpt/breath_23
+[00:49:22 INFO train.py] Outputting to: /disk/scratch/s1915791/git/imu-har/ckpt/breath_23
 [00:49:22 INFO train.py] Training Starting!
 [12:03:23 INFO wandb_ckpt.py] Starting Wandb Logging for experiment breath_23
 [12:03:33 INFO wandb_ckpt.py] Wandb Logging Done!

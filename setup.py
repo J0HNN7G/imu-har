@@ -11,7 +11,7 @@ setuptools.setup(
     description='PDIoT ML Package',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/J0HNN7G/pdiot-ml',
+    url='https://github.com/J0HNN7G/imu-har',
     packages=setuptools.find_packages(),
     classifiers=(
         'Programming Language :: Python :: 3',

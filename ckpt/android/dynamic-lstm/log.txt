@@ -1,4 +1,4 @@
-[13:26:08 INFO train.py] Loaded configuration file: /home/s1915791/git/pdiot-ml/config/dynamic.yaml
+[13:26:08 INFO train.py] Loaded configuration file: /home/s1915791/git/imu-har/config/dynamic.yaml
 [13:26:08 INFO train.py] Running with config:
 DATASET:
   LIST:
@@ -6,7 +6,7 @@ DATASET:
     train: train_dynamic_pdiot-data.odgt
     val: val_dynamic_pdiot-data.odgt
   num_classes: 6
-  path: /disk/scratch/s1915791/git/pdiot-ml/data/sets/pdiot-data
+  path: /disk/scratch/s1915791/git/imu-har/data/sets/pdiot-data
 MODEL:
   ARCH:
     LSTM:
@@ -41,8 +41,8 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/dynamic_43
-[13:26:08 INFO train.py] Outputting to: /disk/scratch/s1915791/git/pdiot-ml/ckpt/dynamic_43
+  path: /disk/scratch/s1915791/git/imu-har/ckpt/dynamic_43
+[13:26:08 INFO train.py] Outputting to: /disk/scratch/s1915791/git/imu-har/ckpt/dynamic_43
 [13:26:08 INFO train.py] Training Starting!
 [14:06:51 INFO train.py] Training Done!
 [15:34:40 INFO wandb_ckpt.py] Starting Wandb Logging for experiment dynamic_43

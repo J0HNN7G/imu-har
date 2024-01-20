@@ -1,9 +1,9 @@
-[21:00:14 INFO train.py] Loaded configuration file: /home/s1915791/git/pdiot-ml/config
+[21:00:14 INFO train.py] Loaded configuration file: /home/s1915791/git/imu-har/config
 [21:00:14 INFO train.py] Running with config:
 DATASET:
   component: resp
   odgt: full_t2_pdiot-data.odgt
-  path: /disk/scratch/s1915791/git/pdiot-ml/data/sets/pdiot-data
+  path: /disk/scratch/s1915791/git/imu-har/data/sets/pdiot-data
   task: 2
 MODEL:
   ARCH:
@@ -51,8 +51,8 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/train/task_2_resp
-[21:00:14 INFO train.py] Outputting to: /disk/scratch/s1915791/git/pdiot-ml/ckpt/train/task_2_resp
+  path: /disk/scratch/s1915791/git/imu-har/ckpt/train/task_2_resp
+[21:00:14 INFO train.py] Outputting to: /disk/scratch/s1915791/git/imu-har/ckpt/train/task_2_resp
 [21:00:14 INFO train.py] Training Starting!
 [21:09:07 INFO train.py] Training Done!
 [21:32:22 INFO log_all.py] Starting Wandb Logging for experiment task_2_resp

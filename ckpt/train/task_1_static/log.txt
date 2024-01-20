@@ -1,9 +1,9 @@
-[21:00:18 INFO train.py] Loaded configuration file: /home/s1915791/git/pdiot-ml/config
+[21:00:18 INFO train.py] Loaded configuration file: /home/s1915791/git/imu-har/config
 [21:00:18 INFO train.py] Running with config:
 DATASET:
   component: static
   odgt: full_t1_pdiot-data.odgt
-  path: /disk/scratch/s1915791/git/pdiot-ml/data/sets/pdiot-data
+  path: /disk/scratch/s1915791/git/imu-har/data/sets/pdiot-data
   task: 1
 MODEL:
   ARCH:
@@ -51,8 +51,8 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/train/task_1_static
-[21:00:18 INFO train.py] Outputting to: /disk/scratch/s1915791/git/pdiot-ml/ckpt/train/task_1_static
+  path: /disk/scratch/s1915791/git/imu-har/ckpt/train/task_1_static
+[21:00:18 INFO train.py] Outputting to: /disk/scratch/s1915791/git/imu-har/ckpt/train/task_1_static
 [21:00:18 INFO train.py] Training Starting!
 [21:00:26 INFO train.py] Training Done!
 [21:31:40 INFO log_all.py] Starting Wandb Logging for experiment task_1_static

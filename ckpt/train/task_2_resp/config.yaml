@@ -1,7 +1,7 @@
 DATASET:
   component: resp
   odgt: full_t2_pdiot-data.odgt
-  path: /disk/scratch/s1915791/git/pdiot-ml/data/sets/pdiot-data
+  path: /disk/scratch/s1915791/git/imu-har/data/sets/pdiot-data
   task: 2
 MODEL:
   ARCH:
@@ -49,4 +49,4 @@ TRAIN:
     momentum: 0.9
     optim: adam
     weight_decay: 0.0005
-  path: /disk/scratch/s1915791/git/pdiot-ml/ckpt/train/task_2_resp
+  path: /disk/scratch/s1915791/git/imu-har/ckpt/train/task_2_resp

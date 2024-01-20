@@ -2,17 +2,17 @@
     "PERSONAL": {
         "HOME": "/home",
         "USER": "",
-        "PROJECT": "pdiot-ml"
+        "PROJECT": "imu-har"
     },
     "EDI": {
         "HOME": "/home",
         "USER": "",
-        "PROJECT": "pdiot-ml"
+        "PROJECT": "imu-har"
     },
     "SCRATCH": {
         "HOME": "/disk/scratch",
         "USER" : "",
-        "PROJECT" : "pdiot-ml"
+        "PROJECT" : "imu-har"
     },
     "DATASET": "pdiot-data",
     "CONFIG_DN": "config",

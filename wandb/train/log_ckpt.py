@@ -43,7 +43,7 @@ def main(cfg):
 
     # Assuming exp_name is defined elsewhere in your code
     run = wandb.init(
-        project='pdiot-ml',
+        project='imu-har',
         name=exp_name,
         config={}
     )

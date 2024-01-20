@@ -95,7 +95,7 @@ conda install numpy pandas scikit-learn tqdm
 pip install yacs wandb --upgrade-strategy only-if-needed
 
 # for fully functionality
-cd <pdiot-ml_directory>
+cd <imu-har_directory>
 python setup.py install
 ```
 
